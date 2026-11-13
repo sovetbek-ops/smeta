@@ -105,3 +105,28 @@ document.querySelector("#estimate-date").value = [
 ].join("-");
 
 addItem(false);
+
+function preparePrint() {
+  recalculate();
+  const number = document.querySelector('[name="estimate-number"]').value.trim() || "—";
+  const date = document.querySelector("#estimate-date").value;
+  const displayDate = date ? date.split("-").reverse().join(".") : "—";
+  document.querySelector("#print-title").textContent = `Смета № ${number} от ${displayDate}`;
+
+  // Plain text copies wrap freely on paper, including long names and comments.
+  // Use textContent so user input is never interpreted as HTML.
+  for (const previous of document.querySelectorAll(".print-value")) previous.remove();
+  const fields = document.querySelectorAll(".details-grid input, #items input, #items select, #comment");
+  for (const field of fields) {
+    const value = document.createElement("span");
+    value.className = "print-value";
+    value.textContent = field.type === "date" ? displayDate : field.value;
+    field.insertAdjacentElement("afterend", value);
+  }
+}
+
+document.querySelector("#save-pdf").addEventListener("click", () => {
+  preparePrint();
+  window.print();
+});
+window.addEventListener("beforeprint", preparePrint);
