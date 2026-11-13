@@ -1,0 +1,78 @@
+:root {
+  color-scheme: light;
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: #202c3b;
+  background: #f3f5f8;
+  --accent: #335dcc;
+  --border: #dce2eb;
+  --muted: #5d697c;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; }
+.page { width: min(1100px, 100%); margin: 0 auto; padding: 48px 24px; }
+.page-header { margin-bottom: 32px; }
+h1 { margin: 0 0 10px; font-size: clamp(28px, 4vw, 38px); letter-spacing: -1px; }
+p { margin: 0; color: var(--muted); line-height: 1.5; }
+h2 { margin: 0; font-size: 20px; }
+.card { padding: 28px; margin-bottom: 24px; background: #fff; border: 1px solid var(--border); border-radius: 18px; }
+.details-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 24px; margin-top: 24px; }
+label { display: block; font-size: 14px; font-weight: 600; }
+input, select, button { min-width: 44px; min-height: 48px; font: inherit; }
+input, select { width: 100%; padding: 11px 12px; color: inherit; border: 1px solid #bbc5d3; border-radius: 9px; background: #fff; }
+.details-grid input { margin-top: 8px; }
+input::placeholder { color: #778294; }
+button { cursor: pointer; border-radius: 9px; font-weight: 600; }
+:is(input, select, button):focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.section-heading { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline; justify-content: space-between; margin-bottom: 24px; }
+.section-heading p { font-size: 13px; }
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+th { padding: 0 8px 12px; text-align: left; color: var(--muted); font-size: 13px; font-weight: 600; }
+th:first-child { width: 32%; }
+th:nth-child(2) { width: 14%; }
+th:nth-child(3) { width: 13%; }
+th:nth-child(4) { width: 17%; }
+th:nth-child(5) { width: 18%; }
+th:last-child { width: 60px; }
+td { padding: 12px 8px; border-top: 1px solid var(--border); }
+td:first-child, th:first-child { padding-left: 0; }
+td:last-child, th:last-child { padding-right: 0; }
+.amount-heading, .line-amount { text-align: right; }
+.line-amount output { font-weight: 600; overflow-wrap: anywhere; }
+.remove-cell { text-align: right; }
+.remove-button { width: 44px; padding: 0; background: transparent; border: 1px solid transparent; color: var(--muted); font-size: 20px; }
+.remove-button:hover { background: #eef1f7; color: #202c3b; }
+.add-button { margin-top: 18px; padding: 12px 18px; background: var(--accent); color: #fff; border: 1px solid var(--accent); }
+.add-button:hover { background: #264bab; }
+.total-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 28px; border: 1px solid #ccd7f5; border-radius: 18px; background: #eaf0ff; }
+.total-card output { color: var(--accent); font-size: clamp(28px, 4vw, 38px); font-weight: 700; overflow-wrap: anywhere; min-width: 0; }
+.mobile-label, .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (min-width: 641px) and (max-width: 900px) {
+  .page { padding-inline: 16px; }
+  .card { padding: 20px 16px; }
+  td, th { padding-inline: 4px; }
+  input, select { padding-inline: 7px; }
+  th:first-child { width: 26%; }
+  th:nth-child(2) { width: 17%; }
+  th:nth-child(5) { width: 17%; }
+}
+
+@media (max-width: 640px) {
+  .page { padding: 28px 16px; }
+  .page-header { margin-bottom: 24px; }
+  .card { padding: 20px 16px; border-radius: 14px; }
+  .details-grid { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  table, tbody { display: block; }
+  thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  tbody { display: grid; gap: 16px; }
+  tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 12px; padding: 16px; border: 1px solid var(--border); border-radius: 12px; }
+  td, td:first-child, td:last-child { display: block; border: 0; padding: 0; }
+  td:first-child, td:nth-child(4) { grid-column: 1 / -1; }
+  .mobile-label { position: static; display: block; width: auto; height: auto; clip-path: none; white-space: normal; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: var(--muted); }
+  .line-amount { text-align: left; align-self: center; }
+  .remove-cell { align-self: end; }
+  .remove-button { border-color: var(--border); }
+  .add-button { width: 100%; }
+  .total-card { align-items: flex-start; flex-direction: column; padding: 24px; border-radius: 14px; }
+}
