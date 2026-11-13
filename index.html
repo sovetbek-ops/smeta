@@ -70,8 +70,16 @@
     <p class="print-only signature">Подпись ____________________</p>
     <div class="print-actions">
       <button type="button" class="add-button" id="save-pdf">Сохранить PDF</button>
+      <button type="button" class="secondary-button" id="copy-whatsapp">Скопировать для WhatsApp</button>
+      <button type="button" class="secondary-button" id="new-estimate">Новая смета</button>
       <p>В окне печати выберите «Сохранить как PDF».</p>
     </div>
+    <p class="draft-status" id="copy-status" role="status" aria-live="polite"></p>
+    <p class="draft-status" id="storage-status" role="status" hidden></p>
+    <section class="card copy-fallback" id="copy-fallback" hidden>
+      <label for="copy-text">Не удалось скопировать автоматически. Скопируйте текст вручную:</label>
+      <textarea id="copy-text" rows="10" readonly></textarea>
+    </section>
   </main>
 
   <template id="item-template">
