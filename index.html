@@ -77,6 +77,7 @@
       <button type="button" class="secondary-button" id="new-estimate">Новая смета</button>
       <button type="button" class="secondary-button" id="save-history">Сохранить в историю</button>
       <button type="button" class="secondary-button" id="show-history" aria-expanded="false" aria-controls="history-panel">История смет</button>
+      <button type="button" class="secondary-button" id="show-catalog" aria-expanded="false" aria-controls="catalog-panel">Каталог</button>
       <p>В окне печати выберите «Сохранить как PDF».</p>
     </div>
     <p class="draft-status" id="copy-status" role="status" aria-live="polite"></p>
@@ -90,6 +91,28 @@
       <p>При открытии другой сметы текущая будет сохранена в историю. Чтобы сохранить правки открытой сметы, нажмите «Сохранить в историю».</p>
       <p class="history-empty" id="history-empty">У вас пока нет сохранённых смет</p>
       <ul class="history-list" id="history-list"></ul>
+    </section>
+    <section class="card catalog-panel" id="catalog-panel" aria-labelledby="catalog-title" hidden>
+      <div class="section-heading">
+        <h2 id="catalog-title">Каталог товаров и услуг</h2>
+        <button type="button" class="secondary-button" id="close-catalog">Закрыть каталог</button>
+      </div>
+      <p>Цены используются в выбранной валюте сметы без пересчёта.</p>
+      <form id="catalog-form" class="catalog-form">
+        <div class="catalog-fields">
+          <label>Название<input type="text" id="catalog-name" required placeholder="Товар или услуга"></label>
+          <label>Единица измерения<select id="catalog-unit"><option>шт</option><option>час</option><option>услуга</option></select></label>
+          <label>Цена<input type="text" id="catalog-price" inputmode="decimal" placeholder="0" autocomplete="off" spellcheck="false"></label>
+        </div>
+        <div class="catalog-actions">
+          <button type="submit" class="secondary-button" id="catalog-save">Добавить в каталог</button>
+          <button type="button" class="secondary-button" id="catalog-cancel" hidden>Отменить редактирование</button>
+        </div>
+      </form>
+      <p class="draft-status" id="catalog-status" role="status" aria-live="polite"></p>
+      <label class="catalog-search">Поиск по названию<input type="search" id="catalog-search" placeholder="Введите название"></label>
+      <p class="catalog-empty" id="catalog-empty">В каталоге пока нет товаров и услуг</p>
+      <ul class="catalog-list" id="catalog-list"></ul>
     </section>
     <section class="card copy-fallback" id="copy-fallback" hidden>
       <label for="copy-text">Не удалось скопировать автоматически. Скопируйте текст вручную:</label>
@@ -126,6 +149,17 @@
       <div class="history-actions">
         <button type="button" class="secondary-button" data-history-action="open">Открыть</button>
         <button type="button" class="secondary-button" data-history-action="delete">Удалить</button>
+      </div>
+    </li>
+  </template>
+  <template id="catalog-entry-template">
+    <li class="catalog-entry">
+      <h3 data-catalog-field="name"></h3>
+      <p><span data-catalog-field="price"></span> / <span data-catalog-field="unit"></span></p>
+      <div class="catalog-actions">
+        <button type="button" class="secondary-button" data-catalog-action="add">Добавить в смету</button>
+        <button type="button" class="secondary-button" data-catalog-action="edit">Редактировать</button>
+        <button type="button" class="secondary-button" data-catalog-action="delete">Удалить</button>
       </div>
     </li>
   </template>

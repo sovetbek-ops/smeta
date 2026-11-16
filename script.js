@@ -228,6 +228,7 @@ document.querySelector("#new-estimate").addEventListener("click", () => {
   addItem();
   restoringDraft = false;
   saveDraft();
+  if (!catalogPanel.hidden) renderCatalog();
 });
 
 function buildMessage() {
@@ -423,11 +424,172 @@ historyList.addEventListener("click", event => {
         restoringDraft = false;
       }
       saveDraft();
+      if (!catalogPanel.hidden) renderCatalog();
       setHistoryOpen(false);
       draftFields.recipient.focus();
       historyStatus.textContent = "Смета открыта для редактирования. Предыдущая версия доступна в истории.";
     }
   } catch {
     historyStatus.textContent = "Не удалось выполнить действие с историей. Текущая смета не заменена. Проверьте локальное хранилище.";
+  }
+});
+
+const catalogKey = "smeta-catalog-v1";
+const catalogPanel = document.querySelector("#catalog-panel");
+const catalogToggle = document.querySelector("#show-catalog");
+const catalogList = document.querySelector("#catalog-list");
+const catalogStatus = document.querySelector("#catalog-status");
+const catalogName = document.querySelector("#catalog-name");
+const catalogUnit = document.querySelector("#catalog-unit");
+const catalogPrice = document.querySelector("#catalog-price");
+const catalogSearch = document.querySelector("#catalog-search");
+let editingCatalogId = null;
+
+function readCatalog() {
+  const saved = localStorage.getItem(catalogKey);
+  if (!saved) return [];
+  const catalog = JSON.parse(saved);
+  if (!catalog || catalog.version !== 1 || !Array.isArray(catalog.entries) ||
+      !catalog.entries.every(entry => entry && typeof entry.id === "string" &&
+        typeof entry.name === "string" && entry.name.trim() &&
+        ["шт", "час", "услуга"].includes(entry.unit) && typeof entry.price === "string") ||
+      new Set(catalog.entries.map(entry => entry.id)).size !== catalog.entries.length) {
+    throw new Error("Invalid catalog");
+  }
+  return catalog.entries;
+}
+
+function writeCatalog(entries) {
+  localStorage.setItem(catalogKey, JSON.stringify({ version: 1, entries }));
+}
+
+function resetCatalogForm() {
+  editingCatalogId = null;
+  catalogName.value = "";
+  catalogUnit.value = "шт";
+  catalogPrice.value = "";
+  document.querySelector("#catalog-save").textContent = "Добавить в каталог";
+  document.querySelector("#catalog-cancel").hidden = true;
+}
+
+function renderCatalog() {
+  catalogList.replaceChildren();
+  const empty = document.querySelector("#catalog-empty");
+  try {
+    const entries = readCatalog();
+    const query = catalogSearch.value.trim().toLocaleLowerCase("ru-RU");
+    const matches = entries.filter(entry => entry.name.toLocaleLowerCase("ru-RU").includes(query));
+    empty.hidden = matches.length > 0;
+    empty.textContent = entries.length ? "По вашему запросу ничего не найдено" : "В каталоге пока нет товаров и услуг";
+    const template = document.querySelector("#catalog-entry-template");
+    for (const entry of matches) {
+      const card = template.content.firstElementChild.cloneNode(true);
+      const values = { name: entry.name, unit: entry.unit, price: formatMoney(readNumber(entry.price)) };
+      for (const [key, value] of Object.entries(values)) {
+        card.querySelector(`[data-catalog-field="${key}"]`).textContent = value;
+      }
+      for (const button of card.querySelectorAll("button[data-catalog-action]")) {
+        button.dataset.catalogId = entry.id;
+      }
+      catalogList.append(card);
+    }
+  } catch {
+    empty.hidden = false;
+    empty.textContent = "Не удалось прочитать каталог. Данные повреждены или локальное хранение недоступно.";
+  }
+}
+
+catalogToggle.addEventListener("click", () => {
+  const open = catalogPanel.hidden;
+  catalogPanel.hidden = !open;
+  catalogToggle.setAttribute("aria-expanded", String(open));
+  if (open) {
+    renderCatalog();
+    catalogSearch.focus();
+  }
+});
+document.querySelector("#close-catalog").addEventListener("click", () => {
+  catalogPanel.hidden = true;
+  catalogToggle.setAttribute("aria-expanded", "false");
+  catalogToggle.focus();
+});
+catalogSearch.addEventListener("input", renderCatalog);
+currencySelect.addEventListener("change", () => {
+  if (!catalogPanel.hidden) renderCatalog();
+});
+document.querySelector("#catalog-cancel").addEventListener("click", () => {
+  resetCatalogForm();
+  catalogStatus.textContent = "Редактирование отменено";
+  catalogName.focus();
+});
+
+document.querySelector("#catalog-form").addEventListener("submit", event => {
+  event.preventDefault();
+  const name = catalogName.value.trim();
+  if (!name) {
+    catalogStatus.textContent = "Укажите название товара или услуги";
+    catalogName.focus();
+    return;
+  }
+  try {
+    const entries = readCatalog();
+    const price = readNumber(catalogPrice.value) === 0 ? "0" : catalogPrice.value.trim();
+    const unit = ["шт", "час", "услуга"].includes(catalogUnit.value) ? catalogUnit.value : "шт";
+    if (editingCatalogId !== null) {
+      const index = entries.findIndex(entry => entry.id === editingCatalogId);
+      if (index === -1) {
+        catalogStatus.textContent = "Эта запись уже удалена. Отмените редактирование, чтобы добавить новую.";
+        return;
+      }
+      entries[index] = { id: editingCatalogId, name, unit, price };
+    } else {
+      let id = String(Date.now());
+      while (entries.some(entry => entry.id === id)) id += "-1";
+      entries.unshift({ id, name, unit, price });
+    }
+    writeCatalog(entries);
+    resetCatalogForm();
+    catalogSearch.value = "";
+    renderCatalog();
+    catalogStatus.textContent = "Запись сохранена в каталоге";
+    catalogName.focus();
+  } catch {
+    catalogStatus.textContent = "Не удалось сохранить запись. Проверьте доступность локального хранилища. Введённые данные оставлены в форме.";
+  }
+});
+
+catalogList.addEventListener("click", event => {
+  const button = event.target.closest("button[data-catalog-action]");
+  if (!button) return;
+  try {
+    const entries = readCatalog();
+    const entry = entries.find(item => item.id === button.dataset.catalogId);
+    if (!entry) {
+      renderCatalog();
+      catalogStatus.textContent = "Эта запись уже удалена из каталога";
+      return;
+    }
+    if (button.dataset.catalogAction === "add") {
+      addItem(true, { name: entry.name, quantity: "1", unit: entry.unit, price: entry.price });
+      catalogStatus.textContent = "Позиция добавлена в смету";
+    } else if (button.dataset.catalogAction === "edit") {
+      editingCatalogId = entry.id;
+      catalogName.value = entry.name;
+      catalogUnit.value = entry.unit;
+      catalogPrice.value = entry.price;
+      document.querySelector("#catalog-save").textContent = "Сохранить изменения";
+      document.querySelector("#catalog-cancel").hidden = false;
+      catalogStatus.textContent = "Редактирование записи каталога";
+      catalogName.focus();
+    } else if (button.dataset.catalogAction === "delete") {
+      if (!window.confirm(`Удалить «${entry.name}» из каталога?`)) return;
+      writeCatalog(entries.filter(item => item.id !== entry.id));
+      if (editingCatalogId === entry.id) resetCatalogForm();
+      renderCatalog();
+      catalogStatus.textContent = "Запись удалена из каталога. Позиции сметы сохранены.";
+      catalogSearch.focus();
+    }
+  } catch {
+    catalogStatus.textContent = "Не удалось выполнить действие. Проверьте данные каталога и доступность локального хранилища.";
   }
 });
