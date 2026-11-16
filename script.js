@@ -1,5 +1,39 @@
 "use strict";
 
+// Theme preferences are independent of the estimate, history and catalog.
+const themeKey = "smeta-theme-v1";
+const lightThemeButton = document.querySelector("#theme-light");
+const darkThemeButton = document.querySelector("#theme-dark");
+const themeStatus = document.querySelector("#theme-status");
+
+function applyTheme(theme) {
+  const dark = theme === "dark";
+  document.documentElement.dataset.theme = dark ? "dark" : "light";
+  lightThemeButton.setAttribute("aria-pressed", String(!dark));
+  darkThemeButton.setAttribute("aria-pressed", String(dark));
+}
+
+let savedTheme = "light";
+try {
+  if (localStorage.getItem(themeKey) === "dark") savedTheme = "dark";
+} catch {
+  // The switch remains usable when browser storage is unavailable.
+}
+applyTheme(savedTheme);
+
+function chooseTheme(theme) {
+  applyTheme(theme);
+  try {
+    localStorage.setItem(themeKey, theme);
+    themeStatus.textContent = "";
+  } catch {
+    themeStatus.textContent = "Тема изменена, но браузер не позволил сохранить выбор.";
+  }
+}
+
+lightThemeButton.addEventListener("click", () => chooseTheme("light"));
+darkThemeButton.addEventListener("click", () => chooseTheme("dark"));
+
 const items = document.querySelector("#items");
 const template = document.querySelector("#item-template");
 const totalOutput = document.querySelector("#total");
