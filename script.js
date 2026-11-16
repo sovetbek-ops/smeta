@@ -33,9 +33,9 @@ function readNumber(value) {
   return Number.isFinite(number) ? number : 0;
 }
 
-function formatMoney(value) {
+function formatMoney(value, currency = currencySelect.value) {
   const safeValue = Number.isFinite(value) ? value : 0;
-  return `${moneyFormatter.format(safeValue).replace(/[\u00a0\u202f]/g, " ")} ${currencySelect.value}`;
+  return `${moneyFormatter.format(safeValue).replace(/[\u00a0\u202f]/g, " ")} ${currency}`;
 }
 
 function roundMoney(value) {
@@ -70,6 +70,7 @@ function recalculate() {
   for (const symbol of document.querySelectorAll("[data-currency]")) {
     symbol.textContent = currencySelect.value;
   }
+  return roundMoney(discounted + vat);
 }
 
 function addItem(focus = true, values = null, afterRow = null) {
@@ -130,14 +131,26 @@ function todayValue() {
     String(today.getDate()).padStart(2, "0")].join("-");
 }
 
-function saveDraft() {
-  if (restoringDraft) return;
-  const draft = {
+function collectDraft() {
+  return {
     version: 1,
     fields: Object.fromEntries(Object.entries(draftFields).map(([key, field]) => [key, field.value])),
     items: Array.from(items.rows, row => Object.fromEntries(rowFields.map(key =>
       [key, row.querySelector(`[data-field="${key}"]`).value])))
   };
+}
+
+function isValidDraft(draft) {
+  return Boolean(draft && draft.version === 1 && draft.fields && Array.isArray(draft.items) &&
+    Object.keys(draftFields).every(key => typeof draft.fields[key] === "string") &&
+    ["₸", "₽", "$", "€"].includes(draft.fields.currency) &&
+    draft.items.every(row => row && rowFields.every(key => typeof row[key] === "string") &&
+      ["шт", "час", "услуга"].includes(row.unit)));
+}
+
+function saveDraft() {
+  if (restoringDraft) return;
+  const draft = collectDraft();
   const status = document.querySelector("#storage-status");
   try {
     localStorage.setItem(storageKey, JSON.stringify(draft));
@@ -155,11 +168,7 @@ function restoreDraft() {
     const saved = localStorage.getItem(storageKey);
     if (!saved) return false;
     const draft = JSON.parse(saved);
-    if (!draft || draft.version !== 1 || !draft.fields || !Array.isArray(draft.items) ||
-        !Object.keys(draftFields).every(key => typeof draft.fields[key] === "string") ||
-        !["₸", "₽", "$", "€"].includes(draft.fields.currency) ||
-        !draft.items.every(row => row && rowFields.every(key => typeof row[key] === "string") &&
-          ["шт", "час", "услуга"].includes(row.unit))) {
+    if (!isValidDraft(draft)) {
       throw new Error("Invalid draft");
     }
     for (const [key, field] of Object.entries(draftFields)) field.value = draft.fields[key];
@@ -289,3 +298,136 @@ document.querySelector("#save-pdf").addEventListener("click", () => {
   window.print();
 });
 window.addEventListener("beforeprint", preparePrint);
+
+const historyKey = "smeta-history-v1";
+const historyPanel = document.querySelector("#history-panel");
+const historyList = document.querySelector("#history-list");
+const historyStatus = document.querySelector("#history-status");
+const historyToggle = document.querySelector("#show-history");
+
+function readHistory() {
+  const saved = localStorage.getItem(historyKey);
+  if (!saved) return [];
+  const history = JSON.parse(saved);
+  if (!history || history.version !== 1 || !Array.isArray(history.estimates) ||
+      !history.estimates.every(entry => entry && typeof entry.id === "string" &&
+        isValidDraft(entry.draft) && Number.isFinite(entry.total)) ||
+      new Set(history.estimates.map(entry => entry.id)).size !== history.estimates.length) {
+    throw new Error("Invalid history");
+  }
+  return history.estimates;
+}
+
+function writeHistory(estimates) {
+  localStorage.setItem(historyKey, JSON.stringify({ version: 1, estimates }));
+}
+
+function addHistorySnapshot(estimates, draft, total) {
+  // Repeated saving of the same version does not create identical entries.
+  const serialized = JSON.stringify(draft);
+  if (estimates.some(entry => JSON.stringify(entry.draft) === serialized)) return estimates;
+  let id = String(Date.now());
+  while (estimates.some(entry => entry.id === id)) id += "-1";
+  return [{ id, draft, total }, ...estimates];
+}
+
+function renderHistory() {
+  historyList.replaceChildren();
+  const empty = document.querySelector("#history-empty");
+  try {
+    const estimates = readHistory();
+    empty.textContent = "У вас пока нет сохранённых смет";
+    empty.hidden = estimates.length > 0;
+    const template = document.querySelector("#history-entry-template");
+    for (const entry of estimates) {
+      const card = template.content.firstElementChild.cloneNode(true);
+      const fields = entry.draft.fields;
+      const values = {
+        number: `Смета № ${fields.number.trim() || "—"}`,
+        date: fields.date ? fields.date.split("-").reverse().join(".") : "—",
+        client: fields.recipient.trim() || "Клиент не указан",
+        total: formatMoney(entry.total, fields.currency),
+        currency: fields.currency
+      };
+      for (const [key, value] of Object.entries(values)) {
+        card.querySelector(`[data-history-field="${key}"]`).textContent = value;
+      }
+      for (const button of card.querySelectorAll("button[data-history-action]")) {
+        button.dataset.historyId = entry.id;
+      }
+      historyList.append(card);
+    }
+  } catch {
+    empty.hidden = false;
+    empty.textContent = "Не удалось прочитать историю. Данные повреждены или локальное хранение недоступно.";
+  }
+}
+
+function setHistoryOpen(open) {
+  historyPanel.hidden = !open;
+  historyToggle.setAttribute("aria-expanded", String(open));
+  if (open) renderHistory();
+}
+
+historyToggle.addEventListener("click", () => setHistoryOpen(historyPanel.hidden));
+document.querySelector("#close-history").addEventListener("click", () => {
+  setHistoryOpen(false);
+  historyToggle.focus();
+});
+
+document.querySelector("#save-history").addEventListener("click", () => {
+  try {
+    const total = recalculate();
+    writeHistory(addHistorySnapshot(readHistory(), collectDraft(), total));
+    setHistoryOpen(true);
+    historyStatus.textContent = "Смета сохранена в историю";
+  } catch {
+    historyStatus.textContent = "Не удалось сохранить смету в историю. Проверьте доступность и свободное место в локальном хранилище.";
+  }
+});
+
+historyList.addEventListener("click", event => {
+  const button = event.target.closest("button[data-history-action]");
+  if (!button) return;
+  try {
+    const estimates = readHistory();
+    const entry = estimates.find(item => item.id === button.dataset.historyId);
+    if (!entry) {
+      renderHistory();
+      historyStatus.textContent = "Эта смета уже удалена из истории";
+      return;
+    }
+    const number = entry.draft.fields.number.trim() || "—";
+    if (button.dataset.historyAction === "delete") {
+      if (!window.confirm(`Удалить смету № ${number} из истории?`)) return;
+      writeHistory(estimates.filter(item => item.id !== entry.id));
+      renderHistory();
+      historyToggle.focus();
+      historyStatus.textContent = "Смета удалена из истории";
+    } else if (button.dataset.historyAction === "open") {
+      if (!window.confirm(`Открыть смету № ${number}? Текущая смета сначала будет сохранена в историю.`)) return;
+      // Do not replace the form until both the current version is archived and
+      // the requested draft can be persisted. A storage failure leaves it intact.
+      writeHistory(addHistorySnapshot(estimates, collectDraft(), recalculate()));
+      localStorage.setItem(storageKey, JSON.stringify(entry.draft));
+      restoringDraft = true;
+      try {
+        for (const [key, field] of Object.entries(draftFields)) field.value = entry.draft.fields[key];
+        items.replaceChildren();
+        for (const row of entry.draft.items) addItem(false, row);
+        recalculate();
+        clearCopyFeedback();
+        for (const value of document.querySelectorAll(".print-value")) value.remove();
+        document.querySelector("#print-title").textContent = "";
+      } finally {
+        restoringDraft = false;
+      }
+      saveDraft();
+      setHistoryOpen(false);
+      draftFields.recipient.focus();
+      historyStatus.textContent = "Смета открыта для редактирования. Предыдущая версия доступна в истории.";
+    }
+  } catch {
+    historyStatus.textContent = "Не удалось выполнить действие с историей. Текущая смета не заменена. Проверьте локальное хранилище.";
+  }
+});

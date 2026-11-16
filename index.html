@@ -75,10 +75,22 @@
       <button type="button" class="add-button" id="save-pdf">Сохранить PDF</button>
       <button type="button" class="secondary-button" id="copy-whatsapp">Скопировать для WhatsApp</button>
       <button type="button" class="secondary-button" id="new-estimate">Новая смета</button>
+      <button type="button" class="secondary-button" id="save-history">Сохранить в историю</button>
+      <button type="button" class="secondary-button" id="show-history" aria-expanded="false" aria-controls="history-panel">История смет</button>
       <p>В окне печати выберите «Сохранить как PDF».</p>
     </div>
     <p class="draft-status" id="copy-status" role="status" aria-live="polite"></p>
     <p class="draft-status" id="storage-status" role="status" hidden></p>
+    <p class="draft-status" id="history-status" role="status" aria-live="polite"></p>
+    <section class="card history-panel" id="history-panel" aria-labelledby="history-title" hidden>
+      <div class="section-heading">
+        <h2 id="history-title">История смет</h2>
+        <button type="button" class="secondary-button" id="close-history">Закрыть историю</button>
+      </div>
+      <p>При открытии другой сметы текущая будет сохранена в историю. Чтобы сохранить правки открытой сметы, нажмите «Сохранить в историю».</p>
+      <p class="history-empty" id="history-empty">У вас пока нет сохранённых смет</p>
+      <ul class="history-list" id="history-list"></ul>
+    </section>
     <section class="card copy-fallback" id="copy-fallback" hidden>
       <label for="copy-text">Не удалось скопировать автоматически. Скопируйте текст вручную:</label>
       <textarea id="copy-text" rows="10" readonly></textarea>
@@ -101,6 +113,21 @@
         </div>
       </td>
     </tr>
+  </template>
+  <template id="history-entry-template">
+    <li class="history-entry">
+      <h3 data-history-field="number"></h3>
+      <dl class="history-details">
+        <div><dt>Дата</dt><dd data-history-field="date"></dd></div>
+        <div><dt>Клиент</dt><dd data-history-field="client"></dd></div>
+        <div><dt>Итого к оплате</dt><dd data-history-field="total"></dd></div>
+        <div><dt>Валюта</dt><dd data-history-field="currency"></dd></div>
+      </dl>
+      <div class="history-actions">
+        <button type="button" class="secondary-button" data-history-action="open">Открыть</button>
+        <button type="button" class="secondary-button" data-history-action="delete">Удалить</button>
+      </div>
+    </li>
   </template>
 </body>
 </html>
