@@ -12,6 +12,10 @@
 body { margin: 0; }
 .page { width: min(1100px, 100%); margin: 0 auto; padding: 48px 24px; }
 .page-header { margin-bottom: 32px; }
+.heading-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 20px; margin-bottom: 10px; }
+.heading-line h1 { margin-bottom: 0; }
+.save-status { font-size: 13px; }
+.save-status:empty { display: none; }
 h1 { margin: 0 0 10px; font-size: clamp(28px, 4vw, 38px); letter-spacing: -1px; }
 p { margin: 0; color: var(--muted); line-height: 1.5; }
 h2 { margin: 0; font-size: 20px; }

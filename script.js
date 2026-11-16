@@ -10,6 +10,7 @@ const currencySelect = document.querySelector("#currency");
 const moneyFormatter = new Intl.NumberFormat("ru-RU", { maximumFractionDigits: 0 });
 let nextId = 0;
 const storageKey = "smeta-draft-v1";
+const saveStatus = document.querySelector("#save-status");
 const draftFields = {
   sender: document.querySelector('[name="sender"]'),
   recipient: document.querySelector('[name="recipient"]'),
@@ -141,7 +142,9 @@ function saveDraft() {
   try {
     localStorage.setItem(storageKey, JSON.stringify(draft));
     status.hidden = true;
+    saveStatus.textContent = "Изменения сохранены";
   } catch {
+    saveStatus.textContent = "Не удалось сохранить изменения";
     status.textContent = "Не удалось сохранить черновик. Проверьте, разрешено ли браузеру локальное хранение данных.";
     status.hidden = false;
   }
@@ -162,8 +165,10 @@ function restoreDraft() {
     for (const [key, field] of Object.entries(draftFields)) field.value = draft.fields[key];
     for (const row of draft.items) addItem(false, row);
     recalculate();
+    saveStatus.textContent = "Изменения сохранены";
     return true;
   } catch {
+    saveStatus.textContent = "Черновик не восстановлен";
     const status = document.querySelector("#storage-status");
     status.textContent = "Не удалось восстановить черновик: он повреждён или локальное хранение недоступно.";
     status.hidden = false;
