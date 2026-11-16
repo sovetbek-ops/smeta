@@ -30,6 +30,7 @@ body { margin: 0; }
 .save-status:empty { display: none; }
 .theme-switch { display: inline-flex; align-self: center; gap: 4px; }
 .theme-switch button { width: 48px; padding: 0; border: 1px solid var(--field-border); background: var(--surface); color: var(--text); font-size: 20px; }
+.language-switch button { font-size: 14px; }
 .theme-switch button:hover { background: var(--hover-bg); }
 .theme-switch button[aria-pressed="true"] { border: 2px solid var(--accent); background: var(--total-bg); }
 h1 { margin: 0 0 10px; font-size: clamp(28px, 4vw, 38px); letter-spacing: -1px; }

@@ -1,5 +1,397 @@
 "use strict";
 
+// All interface translations live in this object. Add the same key to every language.
+const translations = {
+  "ru": {
+    "appTitle": "Смета за 5 минут",
+    "intro": "Добавьте позиции и цены — сумма посчитается сама.",
+    "theme": "Тема оформления",
+    "lightTheme": "Светлая тема",
+    "darkTheme": "Тёмная тема",
+    "details": "Реквизиты",
+    "sender": "От кого",
+    "recipient": "Для кого",
+    "senderPlaceholder": "Ваше имя или компания",
+    "recipientPlaceholder": "Имя клиента или компания",
+    "estimateNumber": "Номер сметы",
+    "numberPlaceholder": "Например, 001",
+    "date": "Дата",
+    "items": "Позиции",
+    "keyboardTip": "Enter в последней строке добавит новую",
+    "name": "Наименование",
+    "quantity": "Количество",
+    "unit": "Единица",
+    "pricePrefix": "Цена,",
+    "amount": "Сумма",
+    "itemActions": "Действия с позицией",
+    "addItem": "+ Добавить позицию",
+    "discountPercent": "Скидка, %",
+    "vatPercent": "НДС, %",
+    "currency": "Валюта",
+    "breakdown": "Расчёт стоимости",
+    "discount": "Скидка",
+    "discounted": "Сумма со скидкой",
+    "vat": "НДС",
+    "total": "Итого к оплате",
+    "comment": "Комментарий",
+    "commentPlaceholder": "Сроки выполнения, условия оплаты",
+    "signature": "Подпись ____________________",
+    "savePdf": "Сохранить PDF",
+    "copyWhatsapp": "Скопировать для WhatsApp",
+    "newEstimate": "Новая смета",
+    "saveHistory": "Сохранить в историю",
+    "history": "История смет",
+    "catalog": "Каталог",
+    "printTip": "В окне печати выберите «Сохранить как PDF».",
+    "closeHistory": "Закрыть историю",
+    "historyTip": "При открытии другой сметы текущая будет сохранена в историю. Чтобы сохранить правки открытой сметы, нажмите «Сохранить в историю».",
+    "historyEmpty": "У вас пока нет сохранённых смет",
+    "catalogTitle": "Каталог товаров и услуг",
+    "closeCatalog": "Закрыть каталог",
+    "catalogTip": "Цены используются в выбранной валюте сметы без пересчёта.",
+    "catalogName": "Название",
+    "productPlaceholder": "Товар или услуга",
+    "unitFull": "Единица измерения",
+    "price": "Цена",
+    "catalogAdd": "Добавить в каталог",
+    "cancelEdit": "Отменить редактирование",
+    "search": "Поиск по названию",
+    "searchPlaceholder": "Введите название",
+    "catalogEmpty": "В каталоге пока нет товаров и услуг",
+    "copyFallback": "Не удалось скопировать автоматически. Скопируйте текст вручную:",
+    "duplicateItem": "Дублировать позицию",
+    "removeItem": "Удалить позицию",
+    "client": "Клиент",
+    "open": "Открыть",
+    "delete": "Удалить",
+    "catalogToEstimate": "Добавить в смету",
+    "edit": "Редактировать",
+    "unitPiece": "шт",
+    "unitHour": "час",
+    "unitService": "услуга",
+    "themeSaveError": "Тема изменена, но браузер не позволил сохранить выбор.",
+    "draftSaved": "Изменения сохранены",
+    "draftSaveFailed": "Не удалось сохранить изменения",
+    "draftSaveError": "Не удалось сохранить черновик. Проверьте, разрешено ли браузеру локальное хранение данных.",
+    "draftNotRestored": "Черновик не восстановлен",
+    "draftRestoreError": "Не удалось восстановить черновик: он повреждён или локальное хранение недоступно.",
+    "confirmNew": "Создать новую смету? Текущий черновик будет очищен.",
+    "untitled": "Без названия",
+    "copied": "Скопировано ✓",
+    "historyReadError": "Не удалось прочитать историю. Данные повреждены или локальное хранение недоступно.",
+    "noClient": "Клиент не указан",
+    "historySaved": "Смета сохранена в историю",
+    "historySaveError": "Не удалось сохранить смету в историю. Проверьте доступность и свободное место в локальном хранилище.",
+    "historyMissing": "Эта смета уже удалена из истории",
+    "historyDeleted": "Смета удалена из истории",
+    "historyOpened": "Смета открыта для редактирования. Предыдущая версия доступна в истории.",
+    "historyActionError": "Не удалось выполнить действие с историей. Текущая смета не заменена. Проверьте локальное хранилище.",
+    "noMatches": "По вашему запросу ничего не найдено",
+    "catalogReadError": "Не удалось прочитать каталог. Данные повреждены или локальное хранение недоступно.",
+    "editCancelled": "Редактирование отменено",
+    "nameRequired": "Укажите название товара или услуги",
+    "catalogEditMissing": "Эта запись уже удалена. Отмените редактирование, чтобы добавить новую.",
+    "catalogSaved": "Запись сохранена в каталоге",
+    "catalogSaveError": "Не удалось сохранить запись. Проверьте доступность локального хранилища. Введённые данные оставлены в форме.",
+    "catalogMissing": "Эта запись уже удалена из каталога",
+    "itemAdded": "Позиция добавлена в смету",
+    "saveChanges": "Сохранить изменения",
+    "catalogEditing": "Редактирование записи каталога",
+    "catalogDeleted": "Запись удалена из каталога. Позиции сметы сохранены.",
+    "catalogActionError": "Не удалось выполнить действие. Проверьте данные каталога и доступность локального хранилища.",
+    "estimateHeading": "Смета № {number} от {date}",
+    "estimateShort": "Смета № {number}",
+    "confirmHistoryDelete": "Удалить смету № {number} из истории?",
+    "confirmHistoryOpen": "Открыть смету № {number}? Текущая смета сначала будет сохранена в историю.",
+    "confirmCatalogDelete": "Удалить «{name}» из каталога?",
+    "language": "Язык интерфейса",
+    "languageSaveError": "Язык изменён, но браузер не позволил сохранить выбор.",
+    "currencyKzt": "Казахстанский тенге",
+    "currencyRub": "Российский рубль",
+    "currencyUsd": "Доллар США",
+    "currencyEur": "Евро"
+  },
+  "kz": {
+    "appTitle": "5 минутта смета",
+    "intro": "Позициялар мен бағаларды қосыңыз — сома автоматты түрде есептеледі.",
+    "theme": "Безендіру тақырыбы",
+    "lightTheme": "Ашық тақырып",
+    "darkTheme": "Қараңғы тақырып",
+    "details": "Деректемелер",
+    "sender": "Кімнен",
+    "recipient": "Кімге",
+    "senderPlaceholder": "Атыңыз немесе компанияңыз",
+    "recipientPlaceholder": "Клиенттің аты немесе компаниясы",
+    "estimateNumber": "Смета нөмірі",
+    "numberPlaceholder": "Мысалы, 001",
+    "date": "Күні",
+    "items": "Позициялар",
+    "keyboardTip": "Соңғы жолда Enter пернесін бассаңыз, жаңа жол қосылады",
+    "name": "Атауы",
+    "quantity": "Саны",
+    "unit": "Бірлік",
+    "pricePrefix": "Бағасы,",
+    "amount": "Сома",
+    "itemActions": "Позициямен орындалатын әрекеттер",
+    "addItem": "+ Позиция қосу",
+    "discountPercent": "Жеңілдік, %",
+    "vatPercent": "ҚҚС, %",
+    "currency": "Валюта",
+    "breakdown": "Құнын есептеу",
+    "discount": "Жеңілдік",
+    "discounted": "Жеңілдіктен кейінгі сома",
+    "vat": "ҚҚС",
+    "total": "Төленетін жалпы сома",
+    "comment": "Түсініктеме",
+    "commentPlaceholder": "Орындау мерзімдері, төлем шарттары",
+    "signature": "Қолы ____________________",
+    "savePdf": "PDF сақтау",
+    "copyWhatsapp": "WhatsApp үшін көшіру",
+    "newEstimate": "Жаңа смета",
+    "saveHistory": "Тарихқа сақтау",
+    "history": "Сметалар тарихы",
+    "catalog": "Каталог",
+    "printTip": "Басып шығару терезесінде «PDF ретінде сақтау» тармағын таңдаңыз.",
+    "closeHistory": "Тарихты жабу",
+    "historyTip": "Басқа сметаны ашқанда, ағымдағы смета тарихқа сақталады. Ашық сметадағы өзгерістерді сақтау үшін «Тарихқа сақтау» түймесін басыңыз.",
+    "historyEmpty": "Әзірге сақталған сметалар жоқ",
+    "catalogTitle": "Тауарлар мен қызметтер каталогы",
+    "closeCatalog": "Каталогты жабу",
+    "catalogTip": "Бағалар сметада таңдалған валютада қайта есептеусіз қолданылады.",
+    "catalogName": "Атауы",
+    "productPlaceholder": "Тауар немесе қызмет",
+    "unitFull": "Өлшем бірлігі",
+    "price": "Бағасы",
+    "catalogAdd": "Каталогқа қосу",
+    "cancelEdit": "Өңдеуден бас тарту",
+    "search": "Атауы бойынша іздеу",
+    "searchPlaceholder": "Атауын енгізіңіз",
+    "catalogEmpty": "Каталогта әзірге тауарлар мен қызметтер жоқ",
+    "copyFallback": "Автоматты түрде көшіру мүмкін болмады. Мәтінді қолмен көшіріңіз:",
+    "duplicateItem": "Позицияның көшірмесін жасау",
+    "removeItem": "Позицияны жою",
+    "client": "Клиент",
+    "open": "Ашу",
+    "delete": "Жою",
+    "catalogToEstimate": "Сметаға қосу",
+    "edit": "Өңдеу",
+    "unitPiece": "дана",
+    "unitHour": "сағат",
+    "unitService": "қызмет",
+    "themeSaveError": "Тақырып өзгертілді, бірақ браузер таңдауды сақтауға рұқсат бермеді.",
+    "draftSaved": "Өзгерістер сақталды",
+    "draftSaveFailed": "Өзгерістерді сақтау мүмкін болмады",
+    "draftSaveError": "Нобайды сақтау мүмкін болмады. Браузерде деректерді жергілікті сақтауға рұқсат берілгенін тексеріңіз.",
+    "draftNotRestored": "Нобай қалпына келтірілмеді",
+    "draftRestoreError": "Нобайды қалпына келтіру мүмкін болмады: ол бүлінген немесе жергілікті сақтау қолжетімсіз.",
+    "confirmNew": "Жаңа смета жасалсын ба? Ағымдағы нобай тазаланады.",
+    "untitled": "Атаусыз",
+    "copied": "Көшірілді ✓",
+    "historyReadError": "Тарихты оқу мүмкін болмады. Деректер бүлінген немесе жергілікті сақтау қолжетімсіз.",
+    "noClient": "Клиент көрсетілмеген",
+    "historySaved": "Смета тарихқа сақталды",
+    "historySaveError": "Сметаны тарихқа сақтау мүмкін болмады. Жергілікті сақтаудың қолжетімділігін және бос орнын тексеріңіз.",
+    "historyMissing": "Бұл смета тарихтан жойылған",
+    "historyDeleted": "Смета тарихтан жойылды",
+    "historyOpened": "Смета өңдеу үшін ашылды. Алдыңғы нұсқасы тарихта қолжетімді.",
+    "historyActionError": "Тарихпен әрекетті орындау мүмкін болмады. Ағымдағы смета ауыстырылмады. Жергілікті сақтауды тексеріңіз.",
+    "noMatches": "Сұрауыңыз бойынша ештеңе табылмады",
+    "catalogReadError": "Каталогты оқу мүмкін болмады. Деректер бүлінген немесе жергілікті сақтау қолжетімсіз.",
+    "editCancelled": "Өңдеуден бас тартылды",
+    "nameRequired": "Тауардың немесе қызметтің атауын енгізіңіз",
+    "catalogEditMissing": "Бұл жазба жойылған. Жаңасын қосу үшін өңдеуден бас тартыңыз.",
+    "catalogSaved": "Жазба каталогта сақталды",
+    "catalogSaveError": "Жазбаны сақтау мүмкін болмады. Жергілікті сақтаудың қолжетімділігін тексеріңіз. Енгізілген деректер пішінде қалдырылды.",
+    "catalogMissing": "Бұл жазба каталогтан жойылған",
+    "itemAdded": "Позиция сметаға қосылды",
+    "saveChanges": "Өзгерістерді сақтау",
+    "catalogEditing": "Каталог жазбасын өңдеу",
+    "catalogDeleted": "Жазба каталогтан жойылды. Смета позициялары сақталды.",
+    "catalogActionError": "Әрекетті орындау мүмкін болмады. Каталог деректерін және жергілікті сақтаудың қолжетімділігін тексеріңіз.",
+    "estimateHeading": "{date} күнгі № {number} смета",
+    "estimateShort": "№ {number} смета",
+    "confirmHistoryDelete": "№ {number} смета тарихтан жойылсын ба?",
+    "confirmHistoryOpen": "№ {number} смета ашылсын ба? Алдымен ағымдағы смета тарихқа сақталады.",
+    "confirmCatalogDelete": "«{name}» каталогтан жойылсын ба?",
+    "language": "Интерфейс тілі",
+    "languageSaveError": "Тіл өзгертілді, бірақ браузер таңдауды сақтауға рұқсат бермеді.",
+    "currencyKzt": "Қазақстан теңгесі",
+    "currencyRub": "Ресей рублі",
+    "currencyUsd": "АҚШ доллары",
+    "currencyEur": "Еуро"
+  },
+  "en": {
+    "appTitle": "Estimate in 5 Minutes",
+    "intro": "Add items and prices — the total is calculated automatically.",
+    "theme": "Appearance",
+    "lightTheme": "Light theme",
+    "darkTheme": "Dark theme",
+    "details": "Details",
+    "sender": "From",
+    "recipient": "To",
+    "senderPlaceholder": "Your name or company",
+    "recipientPlaceholder": "Client name or company",
+    "estimateNumber": "Estimate number",
+    "numberPlaceholder": "For example, 001",
+    "date": "Date",
+    "items": "Items",
+    "keyboardTip": "Press Enter in the last row to add a new one",
+    "name": "Item name",
+    "quantity": "Quantity",
+    "unit": "Unit",
+    "pricePrefix": "Price,",
+    "amount": "Amount",
+    "itemActions": "Item actions",
+    "addItem": "+ Add item",
+    "discountPercent": "Discount, %",
+    "vatPercent": "VAT, %",
+    "currency": "Currency",
+    "breakdown": "Cost breakdown",
+    "discount": "Discount",
+    "discounted": "Amount after discount",
+    "vat": "VAT",
+    "total": "Total due",
+    "comment": "Comment",
+    "commentPlaceholder": "Completion dates, payment terms",
+    "signature": "Signature ____________________",
+    "savePdf": "Save PDF",
+    "copyWhatsapp": "Copy for WhatsApp",
+    "newEstimate": "New estimate",
+    "saveHistory": "Save to history",
+    "history": "Estimate history",
+    "catalog": "Catalog",
+    "printTip": "In the print dialog, choose “Save as PDF”.",
+    "closeHistory": "Close history",
+    "historyTip": "Opening another estimate saves the current one to history. To save changes to an open estimate, click “Save to history”.",
+    "historyEmpty": "You have no saved estimates yet",
+    "catalogTitle": "Products and services catalog",
+    "closeCatalog": "Close catalog",
+    "catalogTip": "Prices use the selected estimate currency without conversion.",
+    "catalogName": "Name",
+    "productPlaceholder": "Product or service",
+    "unitFull": "Unit of measure",
+    "price": "Price",
+    "catalogAdd": "Add to catalog",
+    "cancelEdit": "Cancel editing",
+    "search": "Search by name",
+    "searchPlaceholder": "Enter a name",
+    "catalogEmpty": "The catalog has no products or services yet",
+    "copyFallback": "Automatic copying failed. Copy the text manually:",
+    "duplicateItem": "Duplicate item",
+    "removeItem": "Remove item",
+    "client": "Client",
+    "open": "Open",
+    "delete": "Delete",
+    "catalogToEstimate": "Add to estimate",
+    "edit": "Edit",
+    "unitPiece": "pcs",
+    "unitHour": "hour",
+    "unitService": "service",
+    "themeSaveError": "The theme changed, but the browser could not save your choice.",
+    "draftSaved": "Changes saved",
+    "draftSaveFailed": "Could not save changes",
+    "draftSaveError": "Could not save the draft. Check that local data storage is allowed in your browser.",
+    "draftNotRestored": "Draft not restored",
+    "draftRestoreError": "Could not restore the draft: it is damaged or local storage is unavailable.",
+    "confirmNew": "Create a new estimate? The current draft will be cleared.",
+    "untitled": "Untitled",
+    "copied": "Copied ✓",
+    "historyReadError": "Could not read history. The data is damaged or local storage is unavailable.",
+    "noClient": "No client specified",
+    "historySaved": "Estimate saved to history",
+    "historySaveError": "Could not save the estimate to history. Check local storage availability and free space.",
+    "historyMissing": "This estimate has already been deleted from history",
+    "historyDeleted": "Estimate deleted from history",
+    "historyOpened": "Estimate opened for editing. The previous version is available in history.",
+    "historyActionError": "Could not complete the history action. The current estimate was not replaced. Check local storage.",
+    "noMatches": "No results found",
+    "catalogReadError": "Could not read the catalog. The data is damaged or local storage is unavailable.",
+    "editCancelled": "Editing cancelled",
+    "nameRequired": "Enter a product or service name",
+    "catalogEditMissing": "This entry has already been deleted. Cancel editing to add a new one.",
+    "catalogSaved": "Entry saved to catalog",
+    "catalogSaveError": "Could not save the entry. Check local storage availability. Your input has been kept in the form.",
+    "catalogMissing": "This entry has already been deleted from the catalog",
+    "itemAdded": "Item added to estimate",
+    "saveChanges": "Save changes",
+    "catalogEditing": "Editing catalog entry",
+    "catalogDeleted": "Entry deleted from catalog. Estimate items have been kept.",
+    "catalogActionError": "Could not complete the action. Check the catalog data and local storage availability.",
+    "estimateHeading": "Estimate No. {number} dated {date}",
+    "estimateShort": "Estimate No. {number}",
+    "confirmHistoryDelete": "Delete estimate No. {number} from history?",
+    "confirmHistoryOpen": "Open estimate No. {number}? The current estimate will first be saved to history.",
+    "confirmCatalogDelete": "Delete “{name}” from the catalog?",
+    "language": "Interface language",
+    "languageSaveError": "The language changed, but the browser could not save your choice.",
+    "currencyKzt": "Kazakhstani tenge",
+    "currencyRub": "Russian ruble",
+    "currencyUsd": "US dollar",
+    "currencyEur": "Euro"
+  }
+};
+const languageKey = "smeta-language-v1";
+let currentLanguage = "ru";
+try {
+  const saved = localStorage.getItem(languageKey);
+  if (Object.hasOwn(translations, saved)) currentLanguage = saved;
+} catch {
+  // Language switching also works when local storage is unavailable.
+}
+
+function t(key, params = {}) {
+  const text = translations[currentLanguage][key] ?? translations.ru[key] ?? key;
+  return text.replace(/\{(\w+)\}/g, (match, name) => String(params[name] ?? match));
+}
+
+function setLocalizedText(element, key) {
+  element.dataset.i18n = key;
+  element.textContent = t(key);
+}
+
+function clearLocalizedText(element) {
+  delete element.dataset.i18n;
+  element.textContent = "";
+}
+
+// Unit codes are unchanged in drafts/history/catalog for backward compatibility.
+function translateUnit(unit) {
+  const keys = { "шт": "unitPiece", "час": "unitHour", "услуга": "unitService" };
+  return keys[unit] ? t(keys[unit]) : unit;
+}
+
+function currencyName(symbol) {
+  const keys = { "₸": "currencyKzt", "₽": "currencyRub", "$": "currencyUsd", "€": "currencyEur" };
+  return keys[symbol] ? symbol + " — " + t(keys[symbol]) : symbol;
+}
+
+function translateTree(root = document) {
+  const elements = [...(root.nodeType === 1 ? [root] : []), ...root.querySelectorAll("*")];
+  for (const element of elements) {
+    if (element.dataset.i18n) element.textContent = t(element.dataset.i18n);
+    for (const attribute of ["placeholder", "aria-label", "title"]) {
+      const key = element.getAttribute("data-i18n-" + attribute);
+      if (key) element.setAttribute(attribute, t(key));
+    }
+    if (element.dataset.i18nCurrency) {
+      element.textContent = element.value + " — " + t(element.dataset.i18nCurrency);
+    }
+    if (element.tagName === "TEMPLATE") translateTree(element.content);
+  }
+}
+
+function updateLanguageControls() {
+  document.documentElement.lang = currentLanguage === "kz" ? "kk" : currentLanguage;
+  for (const button of document.querySelectorAll("[data-language]")) {
+    button.setAttribute("aria-pressed", String(button.dataset.language === currentLanguage));
+  }
+}
+
+translateTree();
+updateLanguageControls();
+
+
+
 // Theme preferences are independent of the estimate, history and catalog.
 const themeKey = "smeta-theme-v1";
 const lightThemeButton = document.querySelector("#theme-light");
@@ -25,9 +417,9 @@ function chooseTheme(theme) {
   applyTheme(theme);
   try {
     localStorage.setItem(themeKey, theme);
-    themeStatus.textContent = "";
+    clearLocalizedText(themeStatus);
   } catch {
-    themeStatus.textContent = "Тема изменена, но браузер не позволил сохранить выбор.";
+    setLocalizedText(themeStatus, "themeSaveError");
   }
 }
 
@@ -109,6 +501,7 @@ function recalculate() {
 
 function addItem(focus = true, values = null, afterRow = null) {
   const row = template.content.firstElementChild.cloneNode(true);
+  translateTree(row);
   const id = ++nextId;
   for (const label of row.querySelectorAll("label[data-label]")) {
     const field = label.dataset.label;
@@ -189,10 +582,10 @@ function saveDraft() {
   try {
     localStorage.setItem(storageKey, JSON.stringify(draft));
     status.hidden = true;
-    saveStatus.textContent = "Изменения сохранены";
+    setLocalizedText(saveStatus, "draftSaved");
   } catch {
-    saveStatus.textContent = "Не удалось сохранить изменения";
-    status.textContent = "Не удалось сохранить черновик. Проверьте, разрешено ли браузеру локальное хранение данных.";
+    setLocalizedText(saveStatus, "draftSaveFailed");
+    setLocalizedText(status, "draftSaveError");
     status.hidden = false;
   }
 }
@@ -208,12 +601,12 @@ function restoreDraft() {
     for (const [key, field] of Object.entries(draftFields)) field.value = draft.fields[key];
     for (const row of draft.items) addItem(false, row);
     recalculate();
-    saveStatus.textContent = "Изменения сохранены";
+    setLocalizedText(saveStatus, "draftSaved");
     return true;
   } catch {
-    saveStatus.textContent = "Черновик не восстановлен";
+    setLocalizedText(saveStatus, "draftNotRestored");
     const status = document.querySelector("#storage-status");
-    status.textContent = "Не удалось восстановить черновик: он повреждён или локальное хранение недоступно.";
+    setLocalizedText(status, "draftRestoreError");
     status.hidden = false;
     return false;
   }
@@ -236,13 +629,13 @@ for (const eventName of ["input", "change"]) {
 
 function clearCopyFeedback() {
   clearTimeout(copyStatusTimer);
-  document.querySelector("#copy-status").textContent = "";
+  clearLocalizedText(document.querySelector("#copy-status"));
   document.querySelector("#copy-fallback").hidden = true;
   document.querySelector("#copy-text").value = "";
 }
 
 document.querySelector("#new-estimate").addEventListener("click", () => {
-  if (!window.confirm("Создать новую смету? Текущий черновик будет очищен.")) return;
+  if (!window.confirm(t("confirmNew"))) return;
   const current = draftFields.number.value.trim();
   const match = current.match(/^(.*?)(\d+)$/);
   const nextNumber = match
@@ -257,7 +650,7 @@ document.querySelector("#new-estimate").addEventListener("click", () => {
   currencySelect.value = "₸";
   items.replaceChildren();
   for (const value of document.querySelectorAll(".print-value")) value.remove();
-  document.querySelector("#print-title").textContent = "";
+  clearLocalizedText(document.querySelector("#print-title"));
   clearCopyFeedback();
   addItem();
   restoringDraft = false;
@@ -268,25 +661,25 @@ document.querySelector("#new-estimate").addEventListener("click", () => {
 function buildMessage() {
   recalculate();
   const date = draftFields.date.value;
-  const lines = [`Смета № ${draftFields.number.value.trim() || "—"} от ${date ? date.split("-").reverse().join(".") : "—"}`];
-  if (draftFields.sender.value.trim()) lines.push(`От кого: ${draftFields.sender.value.trim()}`);
-  if (draftFields.recipient.value.trim()) lines.push(`Для кого: ${draftFields.recipient.value.trim()}`);
+  const lines = [t("estimateHeading", { number: draftFields.number.value.trim() || "—", date: date ? date.split("-").reverse().join(".") : "—" })];
+  if (draftFields.sender.value.trim()) lines.push(`${t("sender")}: ${draftFields.sender.value.trim()}`);
+  if (draftFields.recipient.value.trim()) lines.push(`${t("recipient")}: ${draftFields.recipient.value.trim()}`);
   lines.push("");
   const quantityFormatter = new Intl.NumberFormat("ru-RU", { maximumFractionDigits: 20 });
   for (const row of items.rows) {
     const value = key => row.querySelector(`[data-field="${key}"]`).value;
     const quantity = quantityFormatter.format(readNumber(value("quantity"))).replace(/[\u00a0\u202f]/g, " ");
-    lines.push(`• ${value("name").trim() || "Без названия"} — ${quantity} ${value("unit")} × ${formatMoney(readNumber(value("price")))} = ${row.querySelector('[data-field="amount"]').textContent}`);
+    lines.push(`• ${value("name").trim() || t("untitled")} — ${quantity} ${translateUnit(value("unit"))} × ${formatMoney(readNumber(value("price")))} = ${row.querySelector('[data-field="amount"]').textContent}`);
   }
-  lines.push("", `Сумма: ${document.querySelector("#subtotal").textContent}`);
+  lines.push("", `${t("amount")}: ${document.querySelector("#subtotal").textContent}`);
   if (!document.querySelector("#discount-row").hidden) {
-    lines.push(`Скидка (${readNumber(discountInput.value)} %): ${document.querySelector("#discount-amount").textContent}`,
-      `Сумма со скидкой: ${document.querySelector("#discounted-amount").textContent}`);
+    lines.push(`${t("discount")} (${readNumber(discountInput.value)} %): ${document.querySelector("#discount-amount").textContent}`,
+      `${t("discounted")}: ${document.querySelector("#discounted-amount").textContent}`);
   }
   if (!document.querySelector("#vat-row").hidden) {
-    lines.push(`НДС (${readNumber(vatInput.value)} %): ${document.querySelector("#vat-amount").textContent}`);
+    lines.push(`${t("vat")} (${readNumber(vatInput.value)} %): ${document.querySelector("#vat-amount").textContent}`);
   }
-  lines.push(`Итого к оплате: ${totalOutput.textContent}`);
+  lines.push(`${t("total")}: ${totalOutput.textContent}`);
   if (draftFields.comment.value.trim()) lines.push("", draftFields.comment.value.trim());
   return lines.join("\n");
 }
@@ -296,9 +689,9 @@ document.querySelector("#copy-whatsapp").addEventListener("click", async () => {
   const text = buildMessage();
   try {
     await navigator.clipboard.writeText(text);
-    document.querySelector("#copy-status").textContent = "Скопировано ✓";
+    setLocalizedText(document.querySelector("#copy-status"), "copied");
     copyStatusTimer = setTimeout(() => {
-      document.querySelector("#copy-status").textContent = "";
+      clearLocalizedText(document.querySelector("#copy-status"));
     }, 2000);
   } catch {
     document.querySelector("#copy-fallback").hidden = false;
@@ -314,7 +707,7 @@ function preparePrint() {
   const number = document.querySelector('[name="estimate-number"]').value.trim() || "—";
   const date = document.querySelector("#estimate-date").value;
   const displayDate = date ? date.split("-").reverse().join(".") : "—";
-  document.querySelector("#print-title").textContent = `Смета № ${number} от ${displayDate}`;
+  document.querySelector("#print-title").textContent = t("estimateHeading", { number, date: displayDate });
 
   // Plain text copies wrap freely on paper, including long names and comments.
   // Use textContent so user input is never interpreted as HTML.
@@ -323,7 +716,7 @@ function preparePrint() {
   for (const field of fields) {
     const value = document.createElement("span");
     value.className = "print-value";
-    value.textContent = field.type === "date" ? displayDate : field.value;
+    value.textContent = field.type === "date" ? displayDate : field.tagName === "SELECT" ? translateUnit(field.value) : field.value;
     field.insertAdjacentElement("afterend", value);
   }
 }
@@ -371,18 +764,19 @@ function renderHistory() {
   const empty = document.querySelector("#history-empty");
   try {
     const estimates = readHistory();
-    empty.textContent = "У вас пока нет сохранённых смет";
+    setLocalizedText(empty, "historyEmpty");
     empty.hidden = estimates.length > 0;
     const template = document.querySelector("#history-entry-template");
     for (const entry of estimates) {
       const card = template.content.firstElementChild.cloneNode(true);
+      translateTree(card);
       const fields = entry.draft.fields;
       const values = {
-        number: `Смета № ${fields.number.trim() || "—"}`,
+        number: t("estimateShort", { number: fields.number.trim() || "—" }),
         date: fields.date ? fields.date.split("-").reverse().join(".") : "—",
-        client: fields.recipient.trim() || "Клиент не указан",
+        client: fields.recipient.trim() || t("noClient"),
         total: formatMoney(entry.total, fields.currency),
-        currency: fields.currency
+        currency: currencyName(fields.currency)
       };
       for (const [key, value] of Object.entries(values)) {
         card.querySelector(`[data-history-field="${key}"]`).textContent = value;
@@ -394,7 +788,7 @@ function renderHistory() {
     }
   } catch {
     empty.hidden = false;
-    empty.textContent = "Не удалось прочитать историю. Данные повреждены или локальное хранение недоступно.";
+    setLocalizedText(empty, "historyReadError");
   }
 }
 
@@ -415,9 +809,9 @@ document.querySelector("#save-history").addEventListener("click", () => {
     const total = recalculate();
     writeHistory(addHistorySnapshot(readHistory(), collectDraft(), total));
     setHistoryOpen(true);
-    historyStatus.textContent = "Смета сохранена в историю";
+    setLocalizedText(historyStatus, "historySaved");
   } catch {
-    historyStatus.textContent = "Не удалось сохранить смету в историю. Проверьте доступность и свободное место в локальном хранилище.";
+    setLocalizedText(historyStatus, "historySaveError");
   }
 });
 
@@ -429,18 +823,18 @@ historyList.addEventListener("click", event => {
     const entry = estimates.find(item => item.id === button.dataset.historyId);
     if (!entry) {
       renderHistory();
-      historyStatus.textContent = "Эта смета уже удалена из истории";
+      setLocalizedText(historyStatus, "historyMissing");
       return;
     }
     const number = entry.draft.fields.number.trim() || "—";
     if (button.dataset.historyAction === "delete") {
-      if (!window.confirm(`Удалить смету № ${number} из истории?`)) return;
+      if (!window.confirm(t("confirmHistoryDelete", { number }))) return;
       writeHistory(estimates.filter(item => item.id !== entry.id));
       renderHistory();
       historyToggle.focus();
-      historyStatus.textContent = "Смета удалена из истории";
+      setLocalizedText(historyStatus, "historyDeleted");
     } else if (button.dataset.historyAction === "open") {
-      if (!window.confirm(`Открыть смету № ${number}? Текущая смета сначала будет сохранена в историю.`)) return;
+      if (!window.confirm(t("confirmHistoryOpen", { number }))) return;
       // Do not replace the form until both the current version is archived and
       // the requested draft can be persisted. A storage failure leaves it intact.
       writeHistory(addHistorySnapshot(estimates, collectDraft(), recalculate()));
@@ -453,7 +847,7 @@ historyList.addEventListener("click", event => {
         recalculate();
         clearCopyFeedback();
         for (const value of document.querySelectorAll(".print-value")) value.remove();
-        document.querySelector("#print-title").textContent = "";
+        clearLocalizedText(document.querySelector("#print-title"));
       } finally {
         restoringDraft = false;
       }
@@ -461,10 +855,10 @@ historyList.addEventListener("click", event => {
       if (!catalogPanel.hidden) renderCatalog();
       setHistoryOpen(false);
       draftFields.recipient.focus();
-      historyStatus.textContent = "Смета открыта для редактирования. Предыдущая версия доступна в истории.";
+      setLocalizedText(historyStatus, "historyOpened");
     }
   } catch {
-    historyStatus.textContent = "Не удалось выполнить действие с историей. Текущая смета не заменена. Проверьте локальное хранилище.";
+    setLocalizedText(historyStatus, "historyActionError");
   }
 });
 
@@ -502,7 +896,7 @@ function resetCatalogForm() {
   catalogName.value = "";
   catalogUnit.value = "шт";
   catalogPrice.value = "";
-  document.querySelector("#catalog-save").textContent = "Добавить в каталог";
+  setLocalizedText(document.querySelector("#catalog-save"), "catalogAdd");
   document.querySelector("#catalog-cancel").hidden = true;
 }
 
@@ -514,11 +908,12 @@ function renderCatalog() {
     const query = catalogSearch.value.trim().toLocaleLowerCase("ru-RU");
     const matches = entries.filter(entry => entry.name.toLocaleLowerCase("ru-RU").includes(query));
     empty.hidden = matches.length > 0;
-    empty.textContent = entries.length ? "По вашему запросу ничего не найдено" : "В каталоге пока нет товаров и услуг";
+    setLocalizedText(empty, entries.length ? "noMatches" : "catalogEmpty");
     const template = document.querySelector("#catalog-entry-template");
     for (const entry of matches) {
       const card = template.content.firstElementChild.cloneNode(true);
-      const values = { name: entry.name, unit: entry.unit, price: formatMoney(readNumber(entry.price)) };
+      translateTree(card);
+      const values = { name: entry.name, unit: translateUnit(entry.unit), price: formatMoney(readNumber(entry.price)) };
       for (const [key, value] of Object.entries(values)) {
         card.querySelector(`[data-catalog-field="${key}"]`).textContent = value;
       }
@@ -529,7 +924,7 @@ function renderCatalog() {
     }
   } catch {
     empty.hidden = false;
-    empty.textContent = "Не удалось прочитать каталог. Данные повреждены или локальное хранение недоступно.";
+    setLocalizedText(empty, "catalogReadError");
   }
 }
 
@@ -553,7 +948,7 @@ currencySelect.addEventListener("change", () => {
 });
 document.querySelector("#catalog-cancel").addEventListener("click", () => {
   resetCatalogForm();
-  catalogStatus.textContent = "Редактирование отменено";
+  setLocalizedText(catalogStatus, "editCancelled");
   catalogName.focus();
 });
 
@@ -561,7 +956,7 @@ document.querySelector("#catalog-form").addEventListener("submit", event => {
   event.preventDefault();
   const name = catalogName.value.trim();
   if (!name) {
-    catalogStatus.textContent = "Укажите название товара или услуги";
+    setLocalizedText(catalogStatus, "nameRequired");
     catalogName.focus();
     return;
   }
@@ -572,7 +967,7 @@ document.querySelector("#catalog-form").addEventListener("submit", event => {
     if (editingCatalogId !== null) {
       const index = entries.findIndex(entry => entry.id === editingCatalogId);
       if (index === -1) {
-        catalogStatus.textContent = "Эта запись уже удалена. Отмените редактирование, чтобы добавить новую.";
+        setLocalizedText(catalogStatus, "catalogEditMissing");
         return;
       }
       entries[index] = { id: editingCatalogId, name, unit, price };
@@ -585,10 +980,10 @@ document.querySelector("#catalog-form").addEventListener("submit", event => {
     resetCatalogForm();
     catalogSearch.value = "";
     renderCatalog();
-    catalogStatus.textContent = "Запись сохранена в каталоге";
+    setLocalizedText(catalogStatus, "catalogSaved");
     catalogName.focus();
   } catch {
-    catalogStatus.textContent = "Не удалось сохранить запись. Проверьте доступность локального хранилища. Введённые данные оставлены в форме.";
+    setLocalizedText(catalogStatus, "catalogSaveError");
   }
 });
 
@@ -600,30 +995,56 @@ catalogList.addEventListener("click", event => {
     const entry = entries.find(item => item.id === button.dataset.catalogId);
     if (!entry) {
       renderCatalog();
-      catalogStatus.textContent = "Эта запись уже удалена из каталога";
+      setLocalizedText(catalogStatus, "catalogMissing");
       return;
     }
     if (button.dataset.catalogAction === "add") {
       addItem(true, { name: entry.name, quantity: "1", unit: entry.unit, price: entry.price });
-      catalogStatus.textContent = "Позиция добавлена в смету";
+      setLocalizedText(catalogStatus, "itemAdded");
     } else if (button.dataset.catalogAction === "edit") {
       editingCatalogId = entry.id;
       catalogName.value = entry.name;
       catalogUnit.value = entry.unit;
       catalogPrice.value = entry.price;
-      document.querySelector("#catalog-save").textContent = "Сохранить изменения";
+      setLocalizedText(document.querySelector("#catalog-save"), "saveChanges");
       document.querySelector("#catalog-cancel").hidden = false;
-      catalogStatus.textContent = "Редактирование записи каталога";
+      setLocalizedText(catalogStatus, "catalogEditing");
       catalogName.focus();
     } else if (button.dataset.catalogAction === "delete") {
-      if (!window.confirm(`Удалить «${entry.name}» из каталога?`)) return;
+      if (!window.confirm(t("confirmCatalogDelete", { name: entry.name }))) return;
       writeCatalog(entries.filter(item => item.id !== entry.id));
       if (editingCatalogId === entry.id) resetCatalogForm();
       renderCatalog();
-      catalogStatus.textContent = "Запись удалена из каталога. Позиции сметы сохранены.";
+      setLocalizedText(catalogStatus, "catalogDeleted");
       catalogSearch.focus();
     }
   } catch {
-    catalogStatus.textContent = "Не удалось выполнить действие. Проверьте данные каталога и доступность локального хранилища.";
+    setLocalizedText(catalogStatus, "catalogActionError");
   }
 });
+
+
+function applyLanguage(language) {
+  if (!Object.hasOwn(translations, language)) return;
+  currentLanguage = language;
+  translateTree();
+  updateLanguageControls();
+  recalculate();
+  renderHistory();
+  renderCatalog();
+  // Refresh generated output using labels in the selected language.
+  preparePrint();
+  if (!document.querySelector("#copy-fallback").hidden) {
+    document.querySelector("#copy-text").value = buildMessage();
+  }
+  try {
+    localStorage.setItem(languageKey, language);
+    clearLocalizedText(document.querySelector("#language-status"));
+  } catch {
+    setLocalizedText(document.querySelector("#language-status"), "languageSaveError");
+  }
+}
+
+for (const button of document.querySelectorAll("[data-language]")) {
+  button.addEventListener("click", () => applyLanguage(button.dataset.language));
+}

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Смета за 5 минут</title>
+  <title data-i18n="appTitle">Смета за 5 минут</title>
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
 </head>
@@ -11,133 +11,139 @@
   <main class="page">
     <header class="page-header">
       <div class="heading-line">
-        <h1>Смета за 5 минут</h1>
+        <h1><span data-i18n="appTitle">Смета за 5 минут</span></h1>
         <p class="save-status" id="save-status" role="status" aria-live="polite"></p>
-        <div class="theme-switch" role="group" aria-label="Тема оформления">
-          <button type="button" id="theme-light" aria-label="Светлая тема" title="Светлая тема" aria-pressed="true">☀️</button>
-          <button type="button" id="theme-dark" aria-label="Тёмная тема" title="Тёмная тема" aria-pressed="false">🌙</button>
+        <div class="theme-switch language-switch" role="group" aria-label="Язык интерфейса" data-i18n-aria-label="language">
+          <button type="button" data-language="kz" lang="kk" aria-label="Қазақша" title="Қазақша" aria-pressed="false">KZ</button>
+          <button type="button" data-language="ru" lang="ru" aria-label="Русский" title="Русский" aria-pressed="true">RU</button>
+          <button type="button" data-language="en" lang="en" aria-label="English" title="English" aria-pressed="false">EN</button>
+        </div>
+        <p class="save-status" id="language-status" role="status" aria-live="polite"></p>
+        <div class="theme-switch" role="group" aria-label="Тема оформления" data-i18n-aria-label="theme">
+          <button type="button" id="theme-light" aria-label="Светлая тема" data-i18n-aria-label="lightTheme" title="Светлая тема" data-i18n-title="lightTheme" aria-pressed="true">☀️</button>
+          <button type="button" id="theme-dark" aria-label="Тёмная тема" data-i18n-aria-label="darkTheme" title="Тёмная тема" data-i18n-title="darkTheme" aria-pressed="false">🌙</button>
         </div>
         <p class="save-status" id="theme-status" role="status" aria-live="polite"></p>
       </div>
-      <p>Добавьте позиции и цены — сумма посчитается сама.</p>
+      <p><span data-i18n="intro">Добавьте позиции и цены — сумма посчитается сама.</span></p>
     </header>
     <h1 class="print-only" id="print-title"></h1>
 
     <section class="card" aria-labelledby="details-title">
-      <h2 id="details-title">Реквизиты</h2>
+      <h2 id="details-title"><span data-i18n="details">Реквизиты</span></h2>
       <div class="details-grid">
-        <label>От кого<input type="text" name="sender" placeholder="Ваше имя или компания"></label>
-        <label>Для кого<input type="text" name="recipient" placeholder="Имя клиента или компания"></label>
-        <label>Номер сметы<input type="text" name="estimate-number" placeholder="Например, 001"></label>
-        <label>Дата<input type="date" name="estimate-date" id="estimate-date"></label>
+        <label><span data-i18n="sender">От кого</span><input type="text" name="sender" placeholder="Ваше имя или компания" data-i18n-placeholder="senderPlaceholder"></label>
+        <label><span data-i18n="recipient">Для кого</span><input type="text" name="recipient" placeholder="Имя клиента или компания" data-i18n-placeholder="recipientPlaceholder"></label>
+        <label><span data-i18n="estimateNumber">Номер сметы</span><input type="text" name="estimate-number" placeholder="Например, 001" data-i18n-placeholder="numberPlaceholder"></label>
+        <label><span data-i18n="date">Дата</span><input type="date" name="estimate-date" id="estimate-date"></label>
       </div>
     </section>
 
     <section class="card positions" aria-labelledby="items-title">
       <div class="section-heading">
-        <h2 id="items-title">Позиции</h2>
-        <p id="keyboard-tip">Enter в последней строке добавит новую</p>
+        <h2 id="items-title"><span data-i18n="items">Позиции</span></h2>
+        <p id="keyboard-tip"><span data-i18n="keyboardTip">Enter в последней строке добавит новую</span></p>
       </div>
       <table aria-labelledby="items-title" aria-describedby="keyboard-tip">
         <thead>
           <tr>
-            <th scope="col">Наименование</th>
-            <th scope="col">Количество</th>
-            <th scope="col">Единица</th>
-            <th scope="col">Цена, <span data-currency>₸</span></th>
-            <th scope="col" class="amount-heading">Сумма</th>
-            <th scope="col"><span class="visually-hidden">Действия с позицией</span></th>
+            <th scope="col"><span data-i18n="name">Наименование</span></th>
+            <th scope="col"><span data-i18n="quantity">Количество</span></th>
+            <th scope="col"><span data-i18n="unit">Единица</span></th>
+            <th scope="col"><span data-i18n="pricePrefix">Цена,</span> <span data-currency>₸</span></th>
+            <th scope="col" class="amount-heading"><span data-i18n="amount">Сумма</span></th>
+            <th scope="col"><span class="visually-hidden"><span data-i18n="itemActions">Действия с позицией</span></span></th>
           </tr>
         </thead>
         <tbody id="items"></tbody>
       </table>
-      <button type="button" class="add-button" id="add-item">+ Добавить позицию</button>
+      <button type="button" class="add-button" id="add-item"><span data-i18n="addItem">+ Добавить позицию</span></button>
       <div class="adjustments-grid">
-        <label>Скидка, %<input type="text" id="discount" inputmode="decimal" value="0" autocomplete="off" spellcheck="false"></label>
-        <label>НДС, %<input type="text" id="vat" inputmode="decimal" value="0" autocomplete="off" spellcheck="false"></label>
-        <label>Валюта<select id="currency"><option value="₸">₸</option><option value="₽">₽</option><option value="$">$</option><option value="€">€</option></select></label>
+        <label><span data-i18n="discountPercent">Скидка, %</span><input type="text" id="discount" inputmode="decimal" value="0" autocomplete="off" spellcheck="false"></label>
+        <label><span data-i18n="vatPercent">НДС, %</span><input type="text" id="vat" inputmode="decimal" value="0" autocomplete="off" spellcheck="false"></label>
+        <label><span data-i18n="currency">Валюта</span><select id="currency"><option value="₸" data-i18n-currency="currencyKzt">₸</option><option value="₽" data-i18n-currency="currencyRub">₽</option><option value="$" data-i18n-currency="currencyUsd">$</option><option value="€" data-i18n-currency="currencyEur">€</option></select></label>
       </div>
     </section>
 
-    <div class="card breakdown" aria-label="Расчёт стоимости">
+    <div class="card breakdown" aria-label="Расчёт стоимости" data-i18n-aria-label="breakdown">
       <dl>
-        <div class="summary-row"><dt>Сумма</dt><dd><output id="subtotal">0 ₸</output></dd></div>
-        <div class="summary-row" id="discount-row" hidden><dt>Скидка</dt><dd><output id="discount-amount">0 ₸</output></dd></div>
-        <div class="summary-row" id="discounted-row" hidden><dt>Сумма со скидкой</dt><dd><output id="discounted-amount">0 ₸</output></dd></div>
-        <div class="summary-row" id="vat-row" hidden><dt>НДС</dt><dd><output id="vat-amount">0 ₸</output></dd></div>
+        <div class="summary-row"><dt><span data-i18n="amount">Сумма</span></dt><dd><output id="subtotal">0 ₸</output></dd></div>
+        <div class="summary-row" id="discount-row" hidden><dt><span data-i18n="discount">Скидка</span></dt><dd><output id="discount-amount">0 ₸</output></dd></div>
+        <div class="summary-row" id="discounted-row" hidden><dt><span data-i18n="discounted">Сумма со скидкой</span></dt><dd><output id="discounted-amount">0 ₸</output></dd></div>
+        <div class="summary-row" id="vat-row" hidden><dt><span data-i18n="vat">НДС</span></dt><dd><output id="vat-amount">0 ₸</output></dd></div>
       </dl>
     </div>
     <section class="total-card" aria-labelledby="total-title">
-      <h2 id="total-title">Итого к оплате</h2>
+      <h2 id="total-title"><span data-i18n="total">Итого к оплате</span></h2>
       <output id="total" aria-live="polite" aria-atomic="true">0 ₸</output>
     </section>
     <section class="card comments" aria-labelledby="comment-title">
-      <h2 id="comment-title"><label for="comment">Комментарий</label></h2>
-      <textarea id="comment" rows="4" placeholder="Сроки выполнения, условия оплаты"></textarea>
+      <h2 id="comment-title"><label for="comment"><span data-i18n="comment">Комментарий</span></label></h2>
+      <textarea id="comment" rows="4" placeholder="Сроки выполнения, условия оплаты" data-i18n-placeholder="commentPlaceholder"></textarea>
     </section>
-    <p class="print-only signature">Подпись ____________________</p>
+    <p class="print-only signature"><span data-i18n="signature">Подпись ____________________</span></p>
     <div class="print-actions">
-      <button type="button" class="add-button" id="save-pdf">Сохранить PDF</button>
-      <button type="button" class="secondary-button" id="copy-whatsapp">Скопировать для WhatsApp</button>
-      <button type="button" class="secondary-button" id="new-estimate">Новая смета</button>
-      <button type="button" class="secondary-button" id="save-history">Сохранить в историю</button>
-      <button type="button" class="secondary-button" id="show-history" aria-expanded="false" aria-controls="history-panel">История смет</button>
-      <button type="button" class="secondary-button" id="show-catalog" aria-expanded="false" aria-controls="catalog-panel">Каталог</button>
-      <p>В окне печати выберите «Сохранить как PDF».</p>
+      <button type="button" class="add-button" id="save-pdf"><span data-i18n="savePdf">Сохранить PDF</span></button>
+      <button type="button" class="secondary-button" id="copy-whatsapp"><span data-i18n="copyWhatsapp">Скопировать для WhatsApp</span></button>
+      <button type="button" class="secondary-button" id="new-estimate"><span data-i18n="newEstimate">Новая смета</span></button>
+      <button type="button" class="secondary-button" id="save-history"><span data-i18n="saveHistory">Сохранить в историю</span></button>
+      <button type="button" class="secondary-button" id="show-history" aria-expanded="false" aria-controls="history-panel"><span data-i18n="history">История смет</span></button>
+      <button type="button" class="secondary-button" id="show-catalog" aria-expanded="false" aria-controls="catalog-panel"><span data-i18n="catalog">Каталог</span></button>
+      <p><span data-i18n="printTip">В окне печати выберите «Сохранить как PDF».</span></p>
     </div>
     <p class="draft-status" id="copy-status" role="status" aria-live="polite"></p>
     <p class="draft-status" id="storage-status" role="status" hidden></p>
     <p class="draft-status" id="history-status" role="status" aria-live="polite"></p>
     <section class="card history-panel" id="history-panel" aria-labelledby="history-title" hidden>
       <div class="section-heading">
-        <h2 id="history-title">История смет</h2>
-        <button type="button" class="secondary-button" id="close-history">Закрыть историю</button>
+        <h2 id="history-title"><span data-i18n="history">История смет</span></h2>
+        <button type="button" class="secondary-button" id="close-history"><span data-i18n="closeHistory">Закрыть историю</span></button>
       </div>
-      <p>При открытии другой сметы текущая будет сохранена в историю. Чтобы сохранить правки открытой сметы, нажмите «Сохранить в историю».</p>
-      <p class="history-empty" id="history-empty">У вас пока нет сохранённых смет</p>
+      <p><span data-i18n="historyTip">При открытии другой сметы текущая будет сохранена в историю. Чтобы сохранить правки открытой сметы, нажмите «Сохранить в историю».</span></p>
+      <p class="history-empty" id="history-empty"><span data-i18n="historyEmpty">У вас пока нет сохранённых смет</span></p>
       <ul class="history-list" id="history-list"></ul>
     </section>
     <section class="card catalog-panel" id="catalog-panel" aria-labelledby="catalog-title" hidden>
       <div class="section-heading">
-        <h2 id="catalog-title">Каталог товаров и услуг</h2>
-        <button type="button" class="secondary-button" id="close-catalog">Закрыть каталог</button>
+        <h2 id="catalog-title"><span data-i18n="catalogTitle">Каталог товаров и услуг</span></h2>
+        <button type="button" class="secondary-button" id="close-catalog"><span data-i18n="closeCatalog">Закрыть каталог</span></button>
       </div>
-      <p>Цены используются в выбранной валюте сметы без пересчёта.</p>
-      <form id="catalog-form" class="catalog-form">
+      <p><span data-i18n="catalogTip">Цены используются в выбранной валюте сметы без пересчёта.</span></p>
+      <form id="catalog-form" class="catalog-form" novalidate>
         <div class="catalog-fields">
-          <label>Название<input type="text" id="catalog-name" required placeholder="Товар или услуга"></label>
-          <label>Единица измерения<select id="catalog-unit"><option>шт</option><option>час</option><option>услуга</option></select></label>
-          <label>Цена<input type="text" id="catalog-price" inputmode="decimal" placeholder="0" autocomplete="off" spellcheck="false"></label>
+          <label><span data-i18n="catalogName">Название</span><input type="text" id="catalog-name" required placeholder="Товар или услуга" data-i18n-placeholder="productPlaceholder"></label>
+          <label><span data-i18n="unitFull">Единица измерения</span><select id="catalog-unit"><option value="шт" data-i18n="unitPiece">шт</option><option value="час" data-i18n="unitHour">час</option><option value="услуга" data-i18n="unitService">услуга</option></select></label>
+          <label><span data-i18n="price">Цена</span><input type="text" id="catalog-price" inputmode="decimal" placeholder="0" autocomplete="off" spellcheck="false"></label>
         </div>
         <div class="catalog-actions">
-          <button type="submit" class="secondary-button" id="catalog-save">Добавить в каталог</button>
-          <button type="button" class="secondary-button" id="catalog-cancel" hidden>Отменить редактирование</button>
+          <button type="submit" class="secondary-button" id="catalog-save" data-i18n="catalogAdd">Добавить в каталог</button>
+          <button type="button" class="secondary-button" id="catalog-cancel" hidden><span data-i18n="cancelEdit">Отменить редактирование</span></button>
         </div>
       </form>
       <p class="draft-status" id="catalog-status" role="status" aria-live="polite"></p>
-      <label class="catalog-search">Поиск по названию<input type="search" id="catalog-search" placeholder="Введите название"></label>
-      <p class="catalog-empty" id="catalog-empty">В каталоге пока нет товаров и услуг</p>
+      <label class="catalog-search"><span data-i18n="search">Поиск по названию</span><input type="search" id="catalog-search" placeholder="Введите название" data-i18n-placeholder="searchPlaceholder"></label>
+      <p class="catalog-empty" id="catalog-empty"><span data-i18n="catalogEmpty">В каталоге пока нет товаров и услуг</span></p>
       <ul class="catalog-list" id="catalog-list"></ul>
     </section>
     <section class="card copy-fallback" id="copy-fallback" hidden>
-      <label for="copy-text">Не удалось скопировать автоматически. Скопируйте текст вручную:</label>
+      <label for="copy-text"><span data-i18n="copyFallback">Не удалось скопировать автоматически. Скопируйте текст вручную:</span></label>
       <textarea id="copy-text" rows="10" readonly></textarea>
     </section>
   </main>
 
   <template id="item-template">
     <tr>
-      <td><label class="mobile-label" data-label="name">Наименование</label><input type="text" data-field="name" placeholder="Товар или услуга"></td>
-      <td><label class="mobile-label" data-label="quantity">Количество</label><input type="text" inputmode="decimal" data-field="quantity" placeholder="0" autocomplete="off" spellcheck="false"></td>
-      <td><label class="mobile-label" data-label="unit">Единица</label><select data-field="unit"><option>шт</option><option>час</option><option>услуга</option></select></td>
-      <td><label class="mobile-label" data-label="price">Цена, <span data-currency>₸</span></label><input type="text" inputmode="decimal" data-field="price" placeholder="0" autocomplete="off" spellcheck="false"></td>
-      <td class="line-amount"><span class="mobile-label">Сумма</span><output data-field="amount">0 ₸</output></td>
+      <td><label class="mobile-label" data-label="name"><span data-i18n="name">Наименование</span></label><input type="text" data-field="name" placeholder="Товар или услуга" data-i18n-placeholder="productPlaceholder"></td>
+      <td><label class="mobile-label" data-label="quantity"><span data-i18n="quantity">Количество</span></label><input type="text" inputmode="decimal" data-field="quantity" placeholder="0" autocomplete="off" spellcheck="false"></td>
+      <td><label class="mobile-label" data-label="unit"><span data-i18n="unit">Единица</span></label><select data-field="unit"><option value="шт" data-i18n="unitPiece">шт</option><option value="час" data-i18n="unitHour">час</option><option value="услуга" data-i18n="unitService">услуга</option></select></td>
+      <td><label class="mobile-label" data-label="price"><span data-i18n="pricePrefix">Цена,</span> <span data-currency>₸</span></label><input type="text" inputmode="decimal" data-field="price" placeholder="0" autocomplete="off" spellcheck="false"></td>
+      <td class="line-amount"><span class="mobile-label"><span data-i18n="amount">Сумма</span></span><output data-field="amount">0 ₸</output></td>
       <td class="remove-cell">
         <div class="row-actions">
-          <button type="button" class="remove-button" data-action="duplicate" aria-label="Дублировать позицию" title="Дублировать позицию">
+          <button type="button" class="remove-button" data-action="duplicate" aria-label="Дублировать позицию" data-i18n-aria-label="duplicateItem" title="Дублировать позицию" data-i18n-title="duplicateItem">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
           </button>
-          <button type="button" class="remove-button" data-action="remove" aria-label="Удалить позицию">✕</button>
+          <button type="button" class="remove-button" data-action="remove" aria-label="Удалить позицию" data-i18n-aria-label="removeItem">✕</button>
         </div>
       </td>
     </tr>
@@ -146,14 +152,14 @@
     <li class="history-entry">
       <h3 data-history-field="number"></h3>
       <dl class="history-details">
-        <div><dt>Дата</dt><dd data-history-field="date"></dd></div>
-        <div><dt>Клиент</dt><dd data-history-field="client"></dd></div>
-        <div><dt>Итого к оплате</dt><dd data-history-field="total"></dd></div>
-        <div><dt>Валюта</dt><dd data-history-field="currency"></dd></div>
+        <div><dt><span data-i18n="date">Дата</span></dt><dd data-history-field="date"></dd></div>
+        <div><dt><span data-i18n="client">Клиент</span></dt><dd data-history-field="client"></dd></div>
+        <div><dt><span data-i18n="total">Итого к оплате</span></dt><dd data-history-field="total"></dd></div>
+        <div><dt><span data-i18n="currency">Валюта</span></dt><dd data-history-field="currency"></dd></div>
       </dl>
       <div class="history-actions">
-        <button type="button" class="secondary-button" data-history-action="open">Открыть</button>
-        <button type="button" class="secondary-button" data-history-action="delete">Удалить</button>
+        <button type="button" class="secondary-button" data-history-action="open"><span data-i18n="open">Открыть</span></button>
+        <button type="button" class="secondary-button" data-history-action="delete"><span data-i18n="delete">Удалить</span></button>
       </div>
     </li>
   </template>
@@ -162,9 +168,9 @@
       <h3 data-catalog-field="name"></h3>
       <p><span data-catalog-field="price"></span> / <span data-catalog-field="unit"></span></p>
       <div class="catalog-actions">
-        <button type="button" class="secondary-button" data-catalog-action="add">Добавить в смету</button>
-        <button type="button" class="secondary-button" data-catalog-action="edit">Редактировать</button>
-        <button type="button" class="secondary-button" data-catalog-action="delete">Удалить</button>
+        <button type="button" class="secondary-button" data-catalog-action="add"><span data-i18n="catalogToEstimate">Добавить в смету</span></button>
+        <button type="button" class="secondary-button" data-catalog-action="edit"><span data-i18n="edit">Редактировать</span></button>
+        <button type="button" class="secondary-button" data-catalog-action="delete"><span data-i18n="delete">Удалить</span></button>
       </div>
     </li>
   </template>
