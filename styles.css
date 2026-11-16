@@ -317,20 +317,3 @@ body:has(.workspace-dialog[open]) { overflow: hidden; }
   #items tr { animation: none; }
   body:has(.workspace-dialog[open]) { overflow: visible; }
 }
-
-
-/* Daily tip: uses the existing theme palette and stays out of printed estimates. */
-.daily-tip { display: flex; align-items: flex-start; gap: 14px; padding: 18px 20px; }
-.daily-tip-icon { display: grid; place-items: center; flex-shrink: 0; width: 40px; height: 40px; border-radius: 11px; background: var(--total-bg); color: var(--accent); }
-.daily-tip-content { min-width: 0; }
-.daily-tip-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; margin-bottom: 6px; }
-.daily-tip-heading h2 { font-size: 14px; letter-spacing: 0; }
-.daily-tip-badge { padding: 3px 8px; border: 1px solid var(--total-border); border-radius: 6px; background: var(--total-bg); color: var(--accent); font-size: 10px; line-height: 1.5; font-weight: 600; }
-.daily-tip p { font-size: 13px; overflow-wrap: anywhere; }
-@media screen and (max-width: 700px) {
-  .daily-tip { padding: 16px; gap: 12px; }
-  .daily-tip-icon { width: 32px; height: 32px; border-radius: 9px; }
-}
-@media print {
-  .daily-tip { display: none !important; }
-}
