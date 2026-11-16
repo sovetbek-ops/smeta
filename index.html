@@ -10,27 +10,30 @@
 <body>
   <main class="page">
     <header class="page-header">
-      <div class="heading-line">
-        <h1><span data-i18n="appTitle">Смета за 5 минут</span></h1>
-        <p class="save-status" id="save-status" role="status" aria-live="polite"></p>
-        <div class="theme-switch language-switch" role="group" aria-label="Язык интерфейса" data-i18n-aria-label="language">
+      <div class="topbar">
+        <div class="brand"><span class="brand-mark"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 7h6M9 11h2m3 0h1m-6 4h2m3 0h1"/></svg></span><h1><span data-i18n="appTitle">Смета за 5 минут</span></h1></div>
+        <div class="topbar-tools">
+          <nav class="workspace-nav"><button type="button" class="secondary-button" id="show-history" aria-expanded="false" aria-controls="history-panel"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 5v5h5"/><path d="M3.5 9a9 9 0 1 1 .8 8M12 7v5l3 2"/></svg><span data-i18n="history">История смет</span></button><button type="button" class="secondary-button" id="show-catalog" aria-expanded="false" aria-controls="catalog-panel"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span data-i18n="catalog">Каталог</span></button></nav>
+          <div class="preferences"><div class="theme-switch language-switch" role="group" aria-label="Язык интерфейса" data-i18n-aria-label="language">
           <button type="button" data-language="kz" lang="kk" aria-label="Қазақша" title="Қазақша" aria-pressed="false">KZ</button>
           <button type="button" data-language="ru" lang="ru" aria-label="Русский" title="Русский" aria-pressed="true">RU</button>
           <button type="button" data-language="en" lang="en" aria-label="English" title="English" aria-pressed="false">EN</button>
+        </div><div class="theme-switch" role="group" aria-label="Тема оформления" data-i18n-aria-label="theme">
+          <button type="button" id="theme-light" aria-label="Светлая тема" data-i18n-aria-label="lightTheme" title="Светлая тема" data-i18n-title="lightTheme" aria-pressed="true"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></button>
+          <button type="button" id="theme-dark" aria-label="Тёмная тема" data-i18n-aria-label="darkTheme" title="Тёмная тема" data-i18n-title="darkTheme" aria-pressed="false"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z"/></svg></button>
+        </div></div>
         </div>
-        <p class="save-status" id="language-status" role="status" aria-live="polite"></p>
-        <div class="theme-switch" role="group" aria-label="Тема оформления" data-i18n-aria-label="theme">
-          <button type="button" id="theme-light" aria-label="Светлая тема" data-i18n-aria-label="lightTheme" title="Светлая тема" data-i18n-title="lightTheme" aria-pressed="true">☀️</button>
-          <button type="button" id="theme-dark" aria-label="Тёмная тема" data-i18n-aria-label="darkTheme" title="Тёмная тема" data-i18n-title="darkTheme" aria-pressed="false">🌙</button>
-        </div>
-        <p class="save-status" id="theme-status" role="status" aria-live="polite"></p>
       </div>
-      <p><span data-i18n="intro">Добавьте позиции и цены — сумма посчитается сама.</span></p>
+      <div class="header-notices"><p class="save-status" id="language-status" role="status" aria-live="polite"></p><p class="save-status" id="theme-status" role="status" aria-live="polite"></p></div>
+      <div class="workspace-heading">
+        <div><p class="eyebrow" data-i18n="workspace">РАБОЧЕЕ ПРОСТРАНСТВО</p><h2 data-i18n="editor">Редактор сметы</h2><p class="workspace-intro"><span data-i18n="intro">Добавьте позиции и цены — сумма посчитается сама.</span></p></div>
+        <div class="heading-actions"><button type="button" class="secondary-button" id="new-estimate"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg><span data-i18n="newEstimate">Новая смета</span></button><p class="save-status" id="save-status" role="status" aria-live="polite"></p></div>
+      </div>
     </header>
     <h1 class="print-only" id="print-title"></h1>
 
-    <section class="card" aria-labelledby="details-title">
-      <h2 id="details-title"><span data-i18n="details">Реквизиты</span></h2>
+    <section class="card details-card" aria-labelledby="details-title">
+      <h2 id="details-title"><span class="section-number" aria-hidden="true">01</span><span data-i18n="details">Реквизиты</span></h2>
       <div class="details-grid">
         <label><span data-i18n="sender">От кого</span><input type="text" name="sender" placeholder="Ваше имя или компания" data-i18n-placeholder="senderPlaceholder"></label>
         <label><span data-i18n="recipient">Для кого</span><input type="text" name="recipient" placeholder="Имя клиента или компания" data-i18n-placeholder="recipientPlaceholder"></label>
@@ -41,7 +44,7 @@
 
     <section class="card positions" aria-labelledby="items-title">
       <div class="section-heading">
-        <h2 id="items-title"><span data-i18n="items">Позиции</span></h2>
+        <h2 id="items-title"><span class="section-number" aria-hidden="true">02</span><span data-i18n="items">Позиции</span></h2>
         <p id="keyboard-tip"><span data-i18n="keyboardTip">Enter в последней строке добавит новую</span></p>
       </div>
       <table aria-labelledby="items-title" aria-describedby="keyboard-tip">
@@ -65,7 +68,14 @@
       </div>
     </section>
 
-    <div class="card breakdown" aria-label="Расчёт стоимости" data-i18n-aria-label="breakdown">
+    <div class="settlement-grid">
+      <div class="notes-column">    <section class="card comments" aria-labelledby="comment-title">
+      <h2 id="comment-title"><span class="section-number" aria-hidden="true">03</span><label for="comment"><span data-i18n="comment">Комментарий</span></label></h2>
+      <textarea id="comment" rows="4" placeholder="Сроки выполнения, условия оплаты" data-i18n-placeholder="commentPlaceholder"></textarea>
+    </section>
+        <p class="privacy-note"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m16 3 5 5v13H3V3Z"/><path d="M7 3v6h9V3M7 21v-8h10v8"/></svg><span data-i18n="localPrivacy">Данные хранятся только в вашем браузере</span></p>
+      </div>
+      <aside class="summary-panel">    <div class="card breakdown" aria-label="Расчёт стоимости" data-i18n-aria-label="breakdown">
       <dl>
         <div class="summary-row"><dt><span data-i18n="amount">Сумма</span></dt><dd><output id="subtotal">0 ₸</output></dd></div>
         <div class="summary-row" id="discount-row" hidden><dt><span data-i18n="discount">Скидка</span></dt><dd><output id="discount-amount">0 ₸</output></dd></div>
@@ -76,37 +86,34 @@
     <section class="total-card" aria-labelledby="total-title">
       <h2 id="total-title"><span data-i18n="total">Итого к оплате</span></h2>
       <output id="total" aria-live="polite" aria-atomic="true">0 ₸</output>
-    </section>
-    <section class="card comments" aria-labelledby="comment-title">
-      <h2 id="comment-title"><label for="comment"><span data-i18n="comment">Комментарий</span></label></h2>
-      <textarea id="comment" rows="4" placeholder="Сроки выполнения, условия оплаты" data-i18n-placeholder="commentPlaceholder"></textarea>
-    </section>
-    <p class="print-only signature"><span data-i18n="signature">Подпись ____________________</span></p>
-    <div class="print-actions">
-      <button type="button" class="add-button" id="save-pdf"><span data-i18n="savePdf">Сохранить PDF</span></button>
-      <button type="button" class="secondary-button" id="copy-whatsapp"><span data-i18n="copyWhatsapp">Скопировать для WhatsApp</span></button>
-      <button type="button" class="secondary-button" id="new-estimate"><span data-i18n="newEstimate">Новая смета</span></button>
-      <button type="button" class="secondary-button" id="save-history"><span data-i18n="saveHistory">Сохранить в историю</span></button>
-      <button type="button" class="secondary-button" id="show-history" aria-expanded="false" aria-controls="history-panel"><span data-i18n="history">История смет</span></button>
-      <button type="button" class="secondary-button" id="show-catalog" aria-expanded="false" aria-controls="catalog-panel"><span data-i18n="catalog">Каталог</span></button>
+    </section>    <div class="print-actions">
+      <button type="button" class="add-button" id="save-pdf"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3v12m-4-4 4 4 4-4M4 15v5h16v-5"/></svg><span data-i18n="savePdf">Сохранить PDF</span></button>
+      <button type="button" class="secondary-button" id="copy-whatsapp"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 11.5a9 9 0 0 1-13 8L3 21l1.5-5A9 9 0 1 1 21 11.5Z"/><path d="M8 8c0 4 4 8 8 8l1-2-3-1-1 1-3-3 1-1-1-3Z"/></svg><span data-i18n="copyWhatsapp">Скопировать для WhatsApp</span></button>
+      
+      <button type="button" class="secondary-button" id="save-history"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m16 3 5 5v13H3V3Z"/><path d="M7 3v6h9V3M7 21v-8h10v8"/></svg><span data-i18n="saveHistory">Сохранить в историю</span></button>
+      
+      
       <p><span data-i18n="printTip">В окне печати выберите «Сохранить как PDF».</span></p>
+    </div></aside>
     </div>
+    <p class="print-only signature"><span data-i18n="signature">Подпись ____________________</span></p>
+
     <p class="draft-status" id="copy-status" role="status" aria-live="polite"></p>
     <p class="draft-status" id="storage-status" role="status" hidden></p>
     <p class="draft-status" id="history-status" role="status" aria-live="polite"></p>
-    <section class="card history-panel" id="history-panel" aria-labelledby="history-title" hidden>
+    <dialog class="workspace-dialog" id="history-dialog" aria-labelledby="history-title"><section class="card history-panel" id="history-panel" aria-labelledby="history-title" hidden>
       <div class="section-heading">
         <h2 id="history-title"><span data-i18n="history">История смет</span></h2>
-        <button type="button" class="secondary-button" id="close-history"><span data-i18n="closeHistory">Закрыть историю</span></button>
+        <button type="button" class="secondary-button" id="close-history"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 6 12 12M6 18 18 6"/></svg><span data-i18n="closeHistory">Закрыть историю</span></button>
       </div>
       <p><span data-i18n="historyTip">При открытии другой сметы текущая будет сохранена в историю. Чтобы сохранить правки открытой сметы, нажмите «Сохранить в историю».</span></p>
       <p class="history-empty" id="history-empty"><span data-i18n="historyEmpty">У вас пока нет сохранённых смет</span></p>
       <ul class="history-list" id="history-list"></ul>
-    </section>
-    <section class="card catalog-panel" id="catalog-panel" aria-labelledby="catalog-title" hidden>
+    </section></dialog>
+    <dialog class="workspace-dialog" id="catalog-dialog" aria-labelledby="catalog-title"><section class="card catalog-panel" id="catalog-panel" aria-labelledby="catalog-title" hidden>
       <div class="section-heading">
         <h2 id="catalog-title"><span data-i18n="catalogTitle">Каталог товаров и услуг</span></h2>
-        <button type="button" class="secondary-button" id="close-catalog"><span data-i18n="closeCatalog">Закрыть каталог</span></button>
+        <button type="button" class="secondary-button" id="close-catalog"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m6 6 12 12M6 18 18 6"/></svg><span data-i18n="closeCatalog">Закрыть каталог</span></button>
       </div>
       <p><span data-i18n="catalogTip">Цены используются в выбранной валюте сметы без пересчёта.</span></p>
       <form id="catalog-form" class="catalog-form" novalidate>
@@ -124,7 +131,7 @@
       <label class="catalog-search"><span data-i18n="search">Поиск по названию</span><input type="search" id="catalog-search" placeholder="Введите название" data-i18n-placeholder="searchPlaceholder"></label>
       <p class="catalog-empty" id="catalog-empty"><span data-i18n="catalogEmpty">В каталоге пока нет товаров и услуг</span></p>
       <ul class="catalog-list" id="catalog-list"></ul>
-    </section>
+    </section></dialog>
     <section class="card copy-fallback" id="copy-fallback" hidden>
       <label for="copy-text"><span data-i18n="copyFallback">Не удалось скопировать автоматически. Скопируйте текст вручную:</span></label>
       <textarea id="copy-text" rows="10" readonly></textarea>
@@ -143,7 +150,7 @@
           <button type="button" class="remove-button" data-action="duplicate" aria-label="Дублировать позицию" data-i18n-aria-label="duplicateItem" title="Дублировать позицию" data-i18n-title="duplicateItem">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
           </button>
-          <button type="button" class="remove-button" data-action="remove" aria-label="Удалить позицию" data-i18n-aria-label="removeItem">✕</button>
+          <button type="button" class="remove-button" data-action="remove" aria-label="Удалить позицию" data-i18n-aria-label="removeItem"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7"/></svg></button>
         </div>
       </td>
     </tr>

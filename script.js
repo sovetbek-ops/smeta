@@ -3,6 +3,9 @@
 // All interface translations live in this object. Add the same key to every language.
 const translations = {
   "ru": {
+    "workspace": "РАБОЧЕЕ ПРОСТРАНСТВО",
+    "editor": "Редактор сметы",
+    "localPrivacy": "Данные хранятся только в вашем браузере",
     "appTitle": "Смета за 5 минут",
     "intro": "Добавьте позиции и цены — сумма посчитается сама.",
     "theme": "Тема оформления",
@@ -112,6 +115,9 @@ const translations = {
     "currencyEur": "Евро"
   },
   "kz": {
+    "workspace": "ЖҰМЫС КЕҢІСТІГІ",
+    "editor": "Смета редакторы",
+    "localPrivacy": "Деректер тек браузеріңізде сақталады",
     "appTitle": "5 минутта смета",
     "intro": "Позициялар мен бағаларды қосыңыз — сома автоматты түрде есептеледі.",
     "theme": "Безендіру тақырыбы",
@@ -221,6 +227,9 @@ const translations = {
     "currencyEur": "Еуро"
   },
   "en": {
+    "workspace": "WORKSPACE",
+    "editor": "Estimate editor",
+    "localPrivacy": "Your data stays in your browser",
     "appTitle": "Estimate in 5 Minutes",
     "intro": "Add items and prices — the total is calculated automatically.",
     "theme": "Appearance",
@@ -793,8 +802,7 @@ function renderHistory() {
 }
 
 function setHistoryOpen(open) {
-  historyPanel.hidden = !open;
-  historyToggle.setAttribute("aria-expanded", String(open));
+  setPanelOpen("history", open);
   if (open) renderHistory();
 }
 
@@ -831,7 +839,7 @@ historyList.addEventListener("click", event => {
       if (!window.confirm(t("confirmHistoryDelete", { number }))) return;
       writeHistory(estimates.filter(item => item.id !== entry.id));
       renderHistory();
-      historyToggle.focus();
+      (historyList.querySelector("button") || document.querySelector("#close-history")).focus();
       setLocalizedText(historyStatus, "historyDeleted");
     } else if (button.dataset.historyAction === "open") {
       if (!window.confirm(t("confirmHistoryOpen", { number }))) return;
@@ -930,16 +938,14 @@ function renderCatalog() {
 
 catalogToggle.addEventListener("click", () => {
   const open = catalogPanel.hidden;
-  catalogPanel.hidden = !open;
-  catalogToggle.setAttribute("aria-expanded", String(open));
+  setPanelOpen("catalog", open);
   if (open) {
     renderCatalog();
     catalogSearch.focus();
   }
 });
 document.querySelector("#close-catalog").addEventListener("click", () => {
-  catalogPanel.hidden = true;
-  catalogToggle.setAttribute("aria-expanded", "false");
+  setPanelOpen("catalog", false);
   catalogToggle.focus();
 });
 catalogSearch.addEventListener("input", renderCatalog);
@@ -999,7 +1005,7 @@ catalogList.addEventListener("click", event => {
       return;
     }
     if (button.dataset.catalogAction === "add") {
-      addItem(true, { name: entry.name, quantity: "1", unit: entry.unit, price: entry.price });
+      addItem(false, { name: entry.name, quantity: "1", unit: entry.unit, price: entry.price });
       setLocalizedText(catalogStatus, "itemAdded");
     } else if (button.dataset.catalogAction === "edit") {
       editingCatalogId = entry.id;
@@ -1048,3 +1054,52 @@ function applyLanguage(language) {
 for (const button of document.querySelectorAll("[data-language]")) {
   button.addEventListener("click", () => applyLanguage(button.dataset.language));
 }
+
+// Presentation only: native dialogs provide focus containment and an inert backdrop.
+const panelDialogs = {
+  history: { dialog: document.querySelector("#history-dialog"), panel: historyPanel, toggle: historyToggle },
+  catalog: { dialog: document.querySelector("#catalog-dialog"), panel: catalogPanel, toggle: catalogToggle }
+};
+
+function setPanelOpen(name, open) {
+  const current = panelDialogs[name];
+  if (open) {
+    for (const [otherName, other] of Object.entries(panelDialogs)) {
+      if (otherName !== name && other.dialog.open) setPanelOpen(otherName, false);
+    }
+    current.panel.hidden = false;
+    current.toggle.setAttribute("aria-expanded", "true");
+    if (!current.dialog.open) current.dialog.showModal();
+  } else {
+    if (current.dialog.open) current.dialog.close();
+    current.panel.hidden = true;
+    current.toggle.setAttribute("aria-expanded", "false");
+  }
+}
+
+for (const [name, current] of Object.entries(panelDialogs)) {
+  current.dialog.addEventListener("cancel", event => {
+    event.preventDefault();
+    setPanelOpen(name, false);
+  });
+  current.dialog.addEventListener("close", () => {
+    if (current.dialog.open) return;
+    current.panel.hidden = true;
+    current.toggle.setAttribute("aria-expanded", "false");
+  });
+  current.dialog.addEventListener("click", event => {
+    if (event.target !== current.dialog) return;
+    const rect = current.dialog.getBoundingClientRect();
+    if (event.clientX < rect.left || event.clientX > rect.right ||
+        event.clientY < rect.top || event.clientY > rect.bottom) setPanelOpen(name, false);
+  });
+}
+
+// Keep history feedback visible both inside the dialog and after closing it.
+const historyModalStatus = document.createElement("p");
+historyModalStatus.className = "draft-status";
+historyModalStatus.setAttribute("role", "status");
+historyPanel.querySelector(".section-heading").after(historyModalStatus);
+new MutationObserver(() => {
+  historyModalStatus.textContent = historyStatus.textContent;
+}).observe(historyStatus, { childList: true, characterData: true, subtree: true });
