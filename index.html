@@ -30,6 +30,20 @@
         <div class="heading-actions"><button type="button" class="secondary-button" id="new-estimate"><svg class="icon " width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg><span data-i18n="newEstimate">Новая смета</span></button><p class="save-status" id="save-status" role="status" aria-live="polite"></p></div>
       </div>
     </header>
+
+    <aside class="card daily-tip" aria-labelledby="daily-tip-title">
+      <span class="daily-tip-icon" aria-hidden="true">
+        <svg class="icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M9 18h6m-5 3h4M8.5 14.5a6 6 0 1 1 7 0c-1 .7-1.5 1.5-1.5 3.5h-4c0-2-.5-2.8-1.5-3.5Z"/></svg>
+      </span>
+      <div class="daily-tip-content">
+        <div class="daily-tip-heading">
+          <h2 id="daily-tip-title" data-i18n="dailyTipTitle">Совет дня</h2>
+          <span class="daily-tip-badge" data-i18n="dailyTipExperimental">Эксперимент</span>
+        </div>
+        <p id="daily-tip-text" data-i18n="dailyTip01" aria-live="polite">Попросите клиента подтвердить объём работ до начала проекта.</p>
+      </div>
+    </aside>
+
     <h1 class="print-only" id="print-title"></h1>
 
     <section class="card details-card" aria-labelledby="details-title">

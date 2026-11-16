@@ -3,6 +3,18 @@
 // All interface translations live in this object. Add the same key to every language.
 const translations = {
   "ru": {
+    "dailyTipTitle": "Совет дня",
+    "dailyTipExperimental": "Эксперимент",
+    "dailyTip01": "Попросите клиента подтвердить объём работ до начала проекта.",
+    "dailyTip02": "Записывайте договорённости с клиентами, чтобы избежать недопонимания.",
+    "dailyTip03": "Разбивайте крупные задачи на небольшие понятные этапы.",
+    "dailyTip04": "После завершения заказа попросите клиента оставить отзыв.",
+    "dailyTip05": "Выделяйте время на ответы клиентам каждый рабочий день.",
+    "dailyTip06": "Перед отправкой предложения проверьте имена, сроки и состав работ.",
+    "dailyTip07": "Храните шаблоны ответов на частые вопросы клиентов.",
+    "dailyTip08": "Заранее сообщайте клиенту об изменениях в сроках выполнения.",
+    "dailyTip09": "В конце недели отмечайте, какие действия принесли лучший результат.",
+    "dailyTip10": "Начинайте рабочий день с одной самой важной задачи.",
     "workspace": "РАБОЧЕЕ ПРОСТРАНСТВО",
     "editor": "Редактор сметы",
     "localPrivacy": "Данные хранятся только в вашем браузере",
@@ -115,6 +127,18 @@ const translations = {
     "currencyEur": "Евро"
   },
   "kz": {
+    "dailyTipTitle": "Күн кеңесі",
+    "dailyTipExperimental": "Сынақ нұсқасы",
+    "dailyTip01": "Жобаны бастамас бұрын, клиенттен жұмыс көлемін растауды сұраңыз.",
+    "dailyTip02": "Түсініспеушілікті болдырмау үшін клиенттермен келісілген шарттарды жазып қойыңыз.",
+    "dailyTip03": "Ірі міндеттерді шағын әрі түсінікті кезеңдерге бөліңіз.",
+    "dailyTip04": "Тапсырыс аяқталған соң, клиенттен пікір қалдыруды сұраңыз.",
+    "dailyTip05": "Әр жұмыс күні клиенттерге жауап беруге уақыт бөліңіз.",
+    "dailyTip06": "Ұсынысты жібермес бұрын, есімдерді, мерзімдерді және жұмыс құрамын тексеріңіз.",
+    "dailyTip07": "Клиенттердің жиі қойылатын сұрақтарына жауап үлгілерін сақтаңыз.",
+    "dailyTip08": "Орындау мерзімдері өзгерсе, клиентке алдын ала хабарлаңыз.",
+    "dailyTip09": "Апта соңында қай әрекеттер жақсы нәтиже бергенін белгілеңіз.",
+    "dailyTip10": "Жұмыс күнін ең маңызды бір міндеттен бастаңыз.",
     "workspace": "ЖҰМЫС КЕҢІСТІГІ",
     "editor": "Смета редакторы",
     "localPrivacy": "Деректер тек браузеріңізде сақталады",
@@ -227,6 +251,18 @@ const translations = {
     "currencyEur": "Еуро"
   },
   "en": {
+    "dailyTipTitle": "Tip of the day",
+    "dailyTipExperimental": "Experimental",
+    "dailyTip01": "Ask the client to confirm the scope before starting a project.",
+    "dailyTip02": "Write down client agreements to avoid misunderstandings.",
+    "dailyTip03": "Break large tasks into small, clear milestones.",
+    "dailyTip04": "Ask clients for feedback after completing an order.",
+    "dailyTip05": "Set aside time to reply to clients every working day.",
+    "dailyTip06": "Check names, deadlines and scope before sending a proposal.",
+    "dailyTip07": "Keep response templates for common client questions.",
+    "dailyTip08": "Let clients know about changes to deadlines in advance.",
+    "dailyTip09": "At the end of each week, note which actions worked best.",
+    "dailyTip10": "Start your working day with your most important task.",
     "workspace": "WORKSPACE",
     "editor": "Estimate editor",
     "localPrivacy": "Your data stays in your browser",
@@ -1103,3 +1139,59 @@ historyPanel.querySelector(".section-heading").after(historyModalStatus);
 new MutationObserver(() => {
   historyModalStatus.textContent = historyStatus.textContent;
 }).observe(historyStatus, { childList: true, characterData: true, subtree: true });
+
+
+// Daily tips have their own storage key and never modify estimate data.
+const dailyTipKey = "smeta-daily-tip-v1";
+const dailyTipKeys = Array.from({ length: 10 }, (_, index) => "dailyTip" + String(index + 1).padStart(2, "0"));
+let dailyTipState = null;
+let dailyTipTimer;
+
+function updateDailyTip(now = new Date()) {
+  // Use the device's local date, including after travel or daylight-saving changes.
+  const date = [now.getFullYear(), String(now.getMonth() + 1).padStart(2, "0"),
+    String(now.getDate()).padStart(2, "0")].join("-");
+  let saved = dailyTipState;
+  try {
+    const stored = JSON.parse(localStorage.getItem(dailyTipKey));
+    if (stored && typeof stored.date === "string" &&
+        Number.isInteger(stored.index) && stored.index >= 0 && stored.index < dailyTipKeys.length) saved = stored;
+  } catch {
+    // Missing, damaged or blocked storage must not affect the rest of the app.
+  }
+  if (!saved || saved.date !== date) {
+    const count = dailyTipKeys.length;
+    // Exclude the previous tip so a new day always brings a different one.
+    let index = Math.floor(Math.random() * (saved ? count - 1 : count));
+    if (saved && index >= saved.index) index += 1;
+    saved = { date, index };
+    try {
+      localStorage.setItem(dailyTipKey, JSON.stringify(saved));
+    } catch {
+      // A fixed shuffled cycle stays stable across reloads even without storage.
+      const day = Math.floor(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86400000);
+      const fallbackOrder = [3, 7, 1, 8, 4, 0, 9, 5, 2, 6];
+      saved.index = fallbackOrder[((day % count) + count) % count];
+    }
+  }
+  dailyTipState = saved;
+  setLocalizedText(document.querySelector("#daily-tip-text"), dailyTipKeys[saved.index]);
+}
+
+function refreshDailyTip() {
+  clearTimeout(dailyTipTimer);
+  const now = new Date();
+  updateDailyTip(now);
+  const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+  dailyTipTimer = setTimeout(refreshDailyTip, midnight.getTime() - now.getTime() + 100);
+}
+
+refreshDailyTip();
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) refreshDailyTip();
+});
+window.addEventListener("focus", refreshDailyTip);
+window.addEventListener("pageshow", refreshDailyTip);
+window.addEventListener("storage", event => {
+  if (event.key === dailyTipKey || event.key === null) refreshDailyTip();
+});
