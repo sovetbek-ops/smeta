@@ -71,7 +71,7 @@ function recalculate() {
   }
 }
 
-function addItem(focus = true, values = null) {
+function addItem(focus = true, values = null, afterRow = null) {
   const row = template.content.firstElementChild.cloneNode(true);
   const id = ++nextId;
   for (const label of row.querySelectorAll("label[data-label]")) {
@@ -83,7 +83,7 @@ function addItem(focus = true, values = null) {
   if (values) {
     for (const field of rowFields) row.querySelector(`[data-field="${field}"]`).value = values[field];
   }
-  items.append(row);
+  items.insertBefore(row, afterRow ? afterRow.nextElementSibling : null);
   recalculate();
   saveDraft();
   if (focus) row.querySelector('[data-field="name"]').focus();
@@ -96,9 +96,16 @@ vatInput.addEventListener("input", recalculate);
 currencySelect.addEventListener("change", recalculate);
 items.addEventListener("input", recalculate);
 items.addEventListener("click", (event) => {
-  const button = event.target.closest('[data-action="remove"]');
+  const button = event.target.closest("button[data-action]");
   if (!button) return;
   const row = button.closest("tr");
+  if (button.dataset.action === "duplicate") {
+    const values = Object.fromEntries(rowFields.map(field =>
+      [field, row.querySelector(`[data-field="${field}"]`).value]));
+    addItem(true, values, row);
+    return;
+  }
+  if (button.dataset.action !== "remove") return;
   const nextRow = row.nextElementSibling || row.previousElementSibling;
   row.remove();
   recalculate();

@@ -38,7 +38,7 @@
             <th scope="col">Единица</th>
             <th scope="col">Цена, <span data-currency>₸</span></th>
             <th scope="col" class="amount-heading">Сумма</th>
-            <th scope="col"><span class="visually-hidden">Удаление</span></th>
+            <th scope="col"><span class="visually-hidden">Действия с позицией</span></th>
           </tr>
         </thead>
         <tbody id="items"></tbody>
@@ -89,7 +89,14 @@
       <td><label class="mobile-label" data-label="unit">Единица</label><select data-field="unit"><option>шт</option><option>час</option><option>услуга</option></select></td>
       <td><label class="mobile-label" data-label="price">Цена, <span data-currency>₸</span></label><input type="text" inputmode="decimal" data-field="price" placeholder="0" autocomplete="off" spellcheck="false"></td>
       <td class="line-amount"><span class="mobile-label">Сумма</span><output data-field="amount">0 ₸</output></td>
-      <td class="remove-cell"><button type="button" class="remove-button" data-action="remove" aria-label="Удалить позицию">✕</button></td>
+      <td class="remove-cell">
+        <div class="row-actions">
+          <button type="button" class="remove-button" data-action="duplicate" aria-label="Дублировать позицию" title="Дублировать позицию">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
+          </button>
+          <button type="button" class="remove-button" data-action="remove" aria-label="Удалить позицию">✕</button>
+        </div>
+      </td>
     </tr>
   </template>
 </body>
