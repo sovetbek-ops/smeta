@@ -438,6 +438,7 @@ darkThemeButton.addEventListener("click", () => chooseTheme("dark"));
 const items = document.querySelector("#items");
 const template = document.querySelector("#item-template");
 const totalOutput = document.querySelector("#total");
+const totalInWords = document.querySelector("#total-in-words");
 const addButton = document.querySelector("#add-item");
 const discountInput = document.querySelector("#discount");
 const vatInput = document.querySelector("#vat");
@@ -477,6 +478,42 @@ function roundMoney(value) {
   return Number.isFinite(value) ? Math.round(value) : 0;
 }
 
+// The estimate already rounds money to whole tenge before conversion.
+function amountInWords(amount, currency) {
+  if (currency !== "₸" || !Number.isInteger(amount) || amount <= 0 || amount > 999999999) return "";
+
+  const units = ["", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять"];
+  const teens = ["десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать", "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать"];
+  const tens = ["", "", "двадцать", "тридцать", "сорок", "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто"];
+  const hundreds = ["", "сто", "двести", "триста", "четыреста", "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот"];
+  const words = [];
+  const groups = [
+    { value: Math.floor(amount / 1000000), forms: ["миллион", "миллиона", "миллионов"] },
+    { value: Math.floor(amount / 1000) % 1000, forms: ["тысяча", "тысячи", "тысяч"], feminine: true },
+    { value: amount % 1000 }
+  ];
+
+  for (const { value, forms, feminine } of groups) {
+    if (!value) continue;
+    words.push(hundreds[Math.floor(value / 100)]);
+    const lastTwo = value % 100;
+    const last = value % 10;
+    if (lastTwo >= 10 && lastTwo <= 19) {
+      words.push(teens[lastTwo - 10]);
+    } else {
+      words.push(tens[Math.floor(lastTwo / 10)]);
+      words.push(feminine && last === 1 ? "одна" : feminine && last === 2 ? "две" : units[last]);
+    }
+    if (forms) {
+      const form = lastTwo >= 11 && lastTwo <= 14 ? 2 : last === 1 ? 0 : last >= 2 && last <= 4 ? 1 : 2;
+      words.push(forms[form]);
+    }
+  }
+  words.push("тенге");
+  const text = words.filter(Boolean).join(" ");
+  return text[0].toUpperCase() + text.slice(1);
+}
+
 function updateSummary(outputId, rowId, amount) {
   document.querySelector(outputId).textContent = formatMoney(amount);
   document.querySelector(rowId).hidden = amount === 0;
@@ -502,6 +539,9 @@ function recalculate() {
   updateSummary("#discounted-amount", "#discounted-row", discounted);
   updateSummary("#vat-amount", "#vat-row", vat);
   totalOutput.textContent = formatMoney(roundMoney(discounted + vat));
+  const words = amountInWords(roundMoney(discounted + vat), currencySelect.value);
+  totalInWords.textContent = words ? `Сумма прописью: ${words}` : "";
+  totalInWords.hidden = !words;
   for (const symbol of document.querySelectorAll("[data-currency]")) {
     symbol.textContent = currencySelect.value;
   }
@@ -689,6 +729,7 @@ function buildMessage() {
     lines.push(`${t("vat")} (${readNumber(vatInput.value)} %): ${document.querySelector("#vat-amount").textContent}`);
   }
   lines.push(`${t("total")}: ${totalOutput.textContent}`);
+  if (!totalInWords.hidden) lines.push(totalInWords.textContent);
   if (draftFields.comment.value.trim()) lines.push("", draftFields.comment.value.trim());
   return lines.join("\n");
 }

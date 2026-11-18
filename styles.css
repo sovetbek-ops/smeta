@@ -115,6 +115,7 @@ td [data-field="quantity"], td [data-field="price"] { font-variant-numeric: tabu
 .total-card h2 { font-size: 12px; color: #fff; opacity: .85; font-weight: 500; letter-spacing: 0; }
 .total-card output { display: block; margin-top: 12px; font-size: clamp(34px, 3.5vw, 46px); line-height: 1.15; letter-spacing: -1.7px; font-weight: 700; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
 .print-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+.total-in-words { margin-top: 16px; color: inherit; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
 #save-pdf { grid-column: 1 / -1; min-height: 48px; }
 .print-actions button { font-size: 12px; padding-inline: 10px; }
 #save-history { grid-column: 1 / -1; color: var(--muted); background: transparent; border-color: transparent; }
@@ -309,6 +310,8 @@ body:has(.workspace-dialog[open]) { overflow: hidden; }
   .card { box-shadow: none; }
   .summary-panel .breakdown { margin: 0 0 3mm auto; padding: 0; }
   .total-card { display: flex; justify-content: space-between; }
+  .total-card { flex-wrap: wrap; }
+  .total-in-words { flex-basis: 100%; margin: 2mm 0 0; color: #000; font-size: 10pt; }
   .details-grid label, .comments h2 label { color: #000; }
   th { background: #fff; }
   .total-card h2 { color: #000; opacity: 1; }
